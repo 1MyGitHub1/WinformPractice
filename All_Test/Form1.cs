@@ -12,7 +12,9 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows.Forms;
+using Timer = System.Timers.Timer;
 
 namespace All_Test
 {
@@ -25,6 +27,58 @@ namespace All_Test
             GlobalInfo.Instance.Totalab_LSerials.MsgCome += Sampler_MsgCome;
 
         }
+
+        #region 日志
+        /// <summary>
+        /// 日志输出
+        /// </summary>
+        /// <param name="logStr"></param>
+        /// <param name="logNum"></param>
+        public void LogShow(string logStr)
+        {
+            string str = "";
+            this.BeginInvoke(new EventHandler(delegate
+            {
+                str = ChangeDateformat() + " " + DateTime.Now.ToShortTimeString() + " :" + logStr + "\n";
+                list_log.AppendText(str);
+                list_log.ScrollToCaret();
+            }));
+        }
+        public static string ChangeDateformat()       //处理当前日期的格式为20150505
+        {
+            try
+            {
+                string strResult = "";
+                string stryear = DateTime.Now.Year.ToString();
+                string strmonth = DateTime.Now.Month.ToString();
+                string strday = DateTime.Now.Day.ToString();
+                int month = DateTime.Now.Month;
+                int day = DateTime.Now.Day;
+                if ((month < 10) && (day < 10))
+                {
+                    strResult = stryear + "0" + strmonth + "0" + strday;
+                }
+                else if (month < 10)
+                {
+                    strResult = stryear + "0" + strmonth + strday;
+                }
+                else if (day < 10)
+                {
+                    strResult = stryear + strmonth + "0" + strday;
+                }
+                else
+                {
+                    strResult = stryear + strmonth + strday;
+                }
+                return strResult;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        #endregion
 
         #region 配置文件
         public static string AssemblyDirectory
@@ -120,6 +174,8 @@ namespace All_Test
             //调用序列化方法
             StudentInfo sto = (StudentInfo)binaryFormatter.Deserialize(fs);
             fs.Close();
+            //textBox_name.Text = sto.name;
+            //textBox_age.Text = sto.age.ToString();
             this.textBox1.Text = sto.name + sto.age.ToString();
 
         }
@@ -150,23 +206,58 @@ namespace All_Test
         }
         private void button1_Click(object sender, EventArgs e)
         {
-            byte[] a = intToBytes(256);
-            byte[] b = intToBytes(14862);
-            byte[] c = intToBytes(-995);
-            byte[] d = intToBytes(8039);
+            //byte[] a = intToBytes(256);
+            //byte[] b = intToBytes(14862);
+            //byte[] c = intToBytes(-995);
+            //byte[] d = intToBytes(8039);
+            byte[] q = intToBytes(90);
 
-            string result1 = a[0].ToString() + "," + a[1].ToString() + "," + a[2].ToString() + "," + a[3].ToString();
-            string result2 = b[0].ToString() + "," + b[1].ToString() + "," + b[2].ToString() + "," + b[3].ToString();
-            string result3 = c[0].ToString() + "," + c[1].ToString() + "," + c[2].ToString() + "," + c[3].ToString();
-            string result4 = d[0].ToString() + "," + d[1].ToString() + "," + d[2].ToString() + "," + d[3].ToString();
+            //string result1 = a[0].ToString() + "," + a[1].ToString() + "," + a[2].ToString() + "," + a[3].ToString();
+            //string result2 = b[0].ToString() + "," + b[1].ToString() + "," + b[2].ToString() + "," + b[3].ToString();
+            //string result3 = c[0].ToString() + "," + c[1].ToString() + "," + c[2].ToString() + "," + c[3].ToString();
+            //string result4 = d[0].ToString() + "," + d[1].ToString() + "," + d[2].ToString() + "," + d[3].ToString();
             //Console.WriteLine(a[0].ToString() + "," + a[1].ToString() + "," + a[2].ToString() + "," + a[3].ToString());
             //Console.WriteLine(b[0].ToString() + "," + b[1].ToString() + "," + b[2].ToString() + "," + b[3].ToString());
             //Console.WriteLine(c[0].ToString() + "," + c[1].ToString() + "," + c[2].ToString() + "," + c[3].ToString());
             //Console.WriteLine(d[0].ToString() + "," + d[1].ToString() + "," + d[2].ToString() + "," + d[3].ToString());
-            //MessageBox.Show("结果"+intToBytes(10).ToString());
-            lab_result.Text = result1 + "\n" + result2 + "\n" + result3 + "\n" + result4;
+            Console.WriteLine(q[0].ToString() + "," + q[1].ToString() + "," + q[2].ToString() + "," + q[3].ToString());
+            LogShow(q[0].ToString() + "," + q[1].ToString() + "," + q[2].ToString() + "," + q[3].ToString());
+
+            //lab_result.Text = result1 + "\n" + result2 + "\n" + result3 + "\n" + result4;
 
         }
+
+        /// <summary>
+        /// 转换
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btn_convert_Click(object sender, EventArgs e)
+        {
+            double volume = 1000.0;
+            int nVolume1;
+            int nVolume2;
+            int nVolume3;
+            int nVolume4;
+            //if (volume >= 0)
+            {
+                nVolume1 = (byte)(volume / 16777216);
+                nVolume2 = (byte)(volume % 16777216 / 65536);
+                nVolume3 = (byte)(volume % 16777216 % 65536 / 256);
+                nVolume4 = (byte)(volume % 16777216 % 65536 % 256);
+            }
+            //else
+            //{
+            //    nVolume1 = (byte)((volume & 0xFF000000) >> 8 >> 8 >> 8);
+            //    nVolume2 = (byte)((volume & 0xFF0000) >> 8 >> 8);
+            //    nVolume3 = (byte)((volume & 0xFF00) >> 8);
+            //    nVolume4 = (byte)(volume & 0XFF);
+            //}
+
+            Console.WriteLine("nVolume1:" + nVolume1 + ",nVolume2:" + nVolume2 + ",nVolume3:" + nVolume3 + ",nVolume4:" + nVolume4);
+            LogShow("nVolume1:" + nVolume1 + "\n nVolume2:" + nVolume2 + "\n nVolume3:" + nVolume3 + "\n nVolume4:" + nVolume4);
+        }
+
         #endregion
 
         #region 事件调用实时读取--参考
@@ -599,6 +690,10 @@ namespace All_Test
                 string num = random.Next(1001, 1089).ToString();
                 Console.WriteLine(count);
                 Console.WriteLine(num);
+
+                LogShow(count.ToString());
+                LogShow(num.ToString());
+
                 if (int.Parse(num) > 1005)
                 {
                     break;
@@ -690,7 +785,7 @@ namespace All_Test
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
 
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < 100; i++)
             {
                 Console.WriteLine($"当前数值{i}");
                 //模拟很耗时 得操作
@@ -701,10 +796,11 @@ namespace All_Test
             //获取当前实例测量得出得总时间
             TimeSpan timeSpan = stopwatch.Elapsed;
             //运行的总秒数
-            Console.WriteLine($"运行时间为：{timeSpan.TotalSeconds}秒");
-
             Console.WriteLine("success!");
-            Console.ReadKey();
+            Console.WriteLine($"运行时间为：{timeSpan.TotalSeconds}秒");
+            LogShow("运行时间为："+ timeSpan.TotalSeconds + "秒");
+            
+            //Console.ReadKey();
         }
         #endregion
 
@@ -832,6 +928,179 @@ namespace All_Test
             }
         }
         #endregion
+
+        #region 一秒执行一次
+        Timer timer = new Timer();
+
+        private void btn_TimeStart_Click(object sender, EventArgs e)
+        {
+            if (tb_times.Text!="")
+            {
+                TestTimer(long.Parse(tb_times.Text));
+            }
+            else
+            {
+                TestTimer(2000);
+            }
+        }
+        private void btn_Stop_Click(object sender, EventArgs e)
+        {
+            timer.Stop();
+        }
+        public void TestTimer(long time)
+        {
+
+            timer = new Timer(time);  //五秒访问
+            //timer.Interval = time;              //设置间隔
+            timer.Elapsed += new ElapsedEventHandler(ServerStart);
+            timer.AutoReset = true;
+            timer.Enabled = true;
+            timer.Start();
+        }
+        public void ServerStart(object sender, ElapsedEventArgs e)
+        {
+            Console.WriteLine(DateTime.Now + "============定时器数据接收服务开启============");
+            LogShow("=定时器数据接收服务开启=");
+        }
+
+
+        #endregion
+
+        #region 四字节float类型转byte
+        private void btn_shift_Click(object sender, EventArgs e)
+        {
+
+            //byte[] frameArray = new byte[4];
+
+            //frameArray[0] = 0x42;
+            //frameArray[1] = 0xB4;
+            //frameArray[2] = 0x00;
+            //frameArray[3] = 0x00;
+            //Console.WriteLine(frameArray[3] + "\n" + frameArray[2] + "\n" + frameArray[1] + "\n" + frameArray[0] + "\n");
+
+            ////四字节float类型转byte 方法1：
+            if (tb_floatValue.Text !="")
+            {
+                byte[] bytes = BitConverter.GetBytes(float.Parse(tb_floatValue.Text));
+                Console.WriteLine(bytes[0] + "\n" + bytes[1] + "\n" + bytes[2] + "\n" + bytes[3] + "\n");
+                //Array.Reverse(bytes);
+                //Console.WriteLine(bytes[0] + "\n" + bytes[1] + "\n" + bytes[2] + "\n" + bytes[3] + "\n");
+                if (BitConverter.ToUInt32(bytes, 0) == 0x42B40000)
+                {
+                    Console.WriteLine("=0x42B40000:" + BitConverter.ToUInt32(bytes, 0).ToString());
+
+                }
+
+            }
+            else
+            {
+                tb_floatValue.Text = "90";
+            }
+
+
+            string accum = 90.ToString("X8");
+            Console.WriteLine(accum);
+
+            byte[] arr = new byte[] { 0x42, 0xB4, 0x00, 0x00 };
+            Console.WriteLine( BitConverter.ToSingle(arr, 0).ToString());
+            Array.Reverse(arr);
+            if (BitConverter.ToUInt32(arr, 0) == 0x42B40000)
+            {
+                Console.WriteLine(BitConverter.ToUInt32(arr, 0).ToString());
+
+            }
+
+            //方法2：
+            //byte[] bytes = GlobalInfo.ToByte(90);
+            //Console.WriteLine(bytes[3] + "\n" + bytes[2] + "\n" + bytes[1] + "\n" + bytes[0] + "\n");
+
+            //byte[] arr = new byte[] { 0x42, 0xB4, 0x00, 0x00 };
+            //float value = GlobalInfo.ToFloat(arr);
+            //Console.WriteLine(value);
+
+
+            byte bytevalue = Convert.ToByte((0x88 >> 4) & 0x0f);
+            Console.WriteLine(bytevalue);
+        }
+
+        #endregion
+
+        #region 延时
+
+        private void btn_TimerTest_Click(object sender, EventArgs e)
+        {
+            WaitFunctions(5);
+
+            Thread thread= new Thread(WaitMin);
+            thread.Start();
+        }
+        public void WaitFunctions(int waitTime)
+        {
+            if (waitTime <= 0) return;
+
+            Console.WriteLine("开始执行 ...");
+            DateTime nowTimer = DateTime.Now;
+            Console.WriteLine("开始时间："+ nowTimer);
+            int interval = 0;
+            while (interval < waitTime)
+            {
+                TimeSpan spand = DateTime.Now - nowTimer;
+                if (interval != spand.Seconds)
+                {
+                    interval = spand.Seconds;
+                    Console.WriteLine(interval + "秒");
+                }
+            }
+            DateTime endTimer = DateTime.Now;
+            Console.WriteLine("结束时间：" + endTimer);
+            Console.WriteLine(waitTime + "秒后继续 ...");
+        }
+
+        public void WaitMin()
+        {
+            long min = DateTime.Now.Ticks / 10000;
+            long delaySeconds = 0;
+            Console.WriteLine("时间开始：" + DateTime.Now);
+            while ((long.Parse(tb_min.Text) * 60 - delaySeconds) > 0)
+            {
+                Thread.Sleep(200);
+                delaySeconds = (DateTime.Now.Ticks / 10000 - min) / 1000;
+            }
+            Console.WriteLine("分钟数到："+ DateTime.Now);
+        }
+        #endregion
+
+        #region modbus用到的字节转换
+        private void btn_modbus_Click(object sender, EventArgs e)
+        {
+            CmdMsg msg11=new CmdMsg();
+            byte[] bytes = { 0x01 ,0x10, 0x00 ,0x02 ,0x00, 0x02,0xE0, 0x08 };
+            //GetMsg1(bytes, msg11);
+
+            byte[] byte8_arry = { 0x01, 0x00 };
+            Array.Reverse(byte8_arry);
+            UInt16 word16 = BitConverter.ToUInt16(byte8_arry,0);
+            //float word4 = BitConverter.ToSingle(byte8_arry, 0);
+            if (word16 == 0x0100)
+            {
+                Console.WriteLine(word16);
+
+
+                byte[] BY = GlobalInfo.intToBytes(word16);
+                Console.WriteLine(BY[0]+" "+ BY[1] + " "+ BY[2] + " "+ BY[3] + " ");
+                UInt16 w = BitConverter.ToUInt16(BY, 0);
+                Console.WriteLine("BY:"+ w);
+                byte[] BY2 = GlobalInfo.intToBytes2(word16);
+                Console.WriteLine(BY2[0] + " " + BY2[1] + " " + BY2[2] + " " + BY2[3] + " ");
+                UInt16 w2 = BitConverter.ToUInt16(BY2, 0);
+                Console.WriteLine("BY2:" + w2);
+
+            }
+        }
+
+
+        #endregion
+
 
     }
 }
