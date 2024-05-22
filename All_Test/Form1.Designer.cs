@@ -33,7 +33,7 @@ namespace All_Test
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.groupBox10 = new System.Windows.Forms.GroupBox();
-            this.button2 = new System.Windows.Forms.Button();
+            this.btn_TypeConverter = new System.Windows.Forms.Button();
             this.groupBox9 = new System.Windows.Forms.GroupBox();
             this.btn_modbus = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
@@ -45,6 +45,9 @@ namespace All_Test
             this.tb_times = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.btn_Panse = new System.Windows.Forms.Button();
+            this.btn_Stop = new System.Windows.Forms.Button();
+            this.btn_wait60 = new System.Windows.Forms.Button();
             this.btn_TimeStart = new System.Windows.Forms.Button();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.btn_reflectC = new System.Windows.Forms.Button();
@@ -59,6 +62,7 @@ namespace All_Test
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.btn_Start = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.list_log = new System.Windows.Forms.RichTextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -68,11 +72,17 @@ namespace All_Test
             this.btn_read = new System.Windows.Forms.Button();
             this.btn_file = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.tb_value = new System.Windows.Forms.TextBox();
             this.btn_convert = new System.Windows.Forms.Button();
-            this.lab_result = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.btn_Stop = new System.Windows.Forms.Button();
-            this.list_log = new System.Windows.Forms.RichTextBox();
+            this.groupBox12 = new System.Windows.Forms.GroupBox();
+            this.button2 = new System.Windows.Forms.Button();
+            this.groupBox11 = new System.Windows.Forms.GroupBox();
+            this.tb_ServiceName = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.btn_ServiceOpen = new System.Windows.Forms.Button();
+            this.btn_ServiceClose = new System.Windows.Forms.Button();
+            this.btn_Ticks = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox10.SuspendLayout();
@@ -85,6 +95,9 @@ namespace All_Test
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            this.tabPage2.SuspendLayout();
+            this.groupBox12.SuspendLayout();
+            this.groupBox11.SuspendLayout();
             this.SuspendLayout();
             // 
             // button1
@@ -101,6 +114,7 @@ namespace All_Test
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.tabControl1.Location = new System.Drawing.Point(7, 6);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -109,6 +123,7 @@ namespace All_Test
             // 
             // tabPage1
             // 
+            this.tabPage1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.tabPage1.Controls.Add(this.groupBox10);
             this.tabPage1.Controls.Add(this.groupBox9);
             this.tabPage1.Controls.Add(this.groupBox8);
@@ -119,6 +134,7 @@ namespace All_Test
             this.tabPage1.Controls.Add(this.groupBox3);
             this.tabPage1.Controls.Add(this.groupBox2);
             this.tabPage1.Controls.Add(this.groupBox1);
+            this.tabPage1.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
@@ -129,21 +145,23 @@ namespace All_Test
             // 
             // groupBox10
             // 
-            this.groupBox10.Controls.Add(this.button2);
+            this.groupBox10.Controls.Add(this.btn_Ticks);
+            this.groupBox10.Controls.Add(this.btn_TypeConverter);
             this.groupBox10.Location = new System.Drawing.Point(540, 296);
             this.groupBox10.Name = "groupBox10";
             this.groupBox10.Size = new System.Drawing.Size(226, 142);
             this.groupBox10.TabIndex = 8;
             this.groupBox10.TabStop = false;
             // 
-            // button2
+            // btn_TypeConverter
             // 
-            this.button2.Location = new System.Drawing.Point(136, 30);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(84, 37);
-            this.button2.TabIndex = 0;
-            this.button2.Text = "读取";
-            this.button2.UseVisualStyleBackColor = true;
+            this.btn_TypeConverter.Location = new System.Drawing.Point(22, 20);
+            this.btn_TypeConverter.Name = "btn_TypeConverter";
+            this.btn_TypeConverter.Size = new System.Drawing.Size(84, 37);
+            this.btn_TypeConverter.TabIndex = 0;
+            this.btn_TypeConverter.Text = "mudbusCRC16校验";
+            this.btn_TypeConverter.UseVisualStyleBackColor = true;
+            this.btn_TypeConverter.Click += new System.EventHandler(this.btn_TypeConverter_Click);
             // 
             // groupBox9
             // 
@@ -202,7 +220,9 @@ namespace All_Test
             this.groupBox8.Controls.Add(this.tb_times);
             this.groupBox8.Controls.Add(this.label5);
             this.groupBox8.Controls.Add(this.label4);
+            this.groupBox8.Controls.Add(this.btn_Panse);
             this.groupBox8.Controls.Add(this.btn_Stop);
+            this.groupBox8.Controls.Add(this.btn_wait60);
             this.groupBox8.Controls.Add(this.btn_TimeStart);
             this.groupBox8.Location = new System.Drawing.Point(6, 296);
             this.groupBox8.Name = "groupBox8";
@@ -213,7 +233,7 @@ namespace All_Test
             // 
             // btn_TimerTest
             // 
-            this.btn_TimerTest.Location = new System.Drawing.Point(201, 104);
+            this.btn_TimerTest.Location = new System.Drawing.Point(201, 113);
             this.btn_TimerTest.Name = "btn_TimerTest";
             this.btn_TimerTest.Size = new System.Drawing.Size(75, 23);
             this.btn_TimerTest.TabIndex = 3;
@@ -223,7 +243,7 @@ namespace All_Test
             // 
             // tb_min
             // 
-            this.tb_min.Location = new System.Drawing.Point(119, 106);
+            this.tb_min.Location = new System.Drawing.Point(119, 113);
             this.tb_min.Name = "tb_min";
             this.tb_min.Size = new System.Drawing.Size(74, 21);
             this.tb_min.TabIndex = 2;
@@ -240,7 +260,7 @@ namespace All_Test
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(11, 109);
+            this.label5.Location = new System.Drawing.Point(11, 118);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(89, 12);
             this.label5.TabIndex = 1;
@@ -254,6 +274,36 @@ namespace All_Test
             this.label4.Size = new System.Drawing.Size(101, 12);
             this.label4.TabIndex = 1;
             this.label4.Text = "每隔一秒执行一次";
+            // 
+            // btn_Panse
+            // 
+            this.btn_Panse.Location = new System.Drawing.Point(201, 86);
+            this.btn_Panse.Name = "btn_Panse";
+            this.btn_Panse.Size = new System.Drawing.Size(75, 23);
+            this.btn_Panse.TabIndex = 0;
+            this.btn_Panse.Text = "暂停";
+            this.btn_Panse.UseVisualStyleBackColor = true;
+            this.btn_Panse.Click += new System.EventHandler(this.btn_Panse_Click);
+            // 
+            // btn_Stop
+            // 
+            this.btn_Stop.Location = new System.Drawing.Point(201, 57);
+            this.btn_Stop.Name = "btn_Stop";
+            this.btn_Stop.Size = new System.Drawing.Size(75, 23);
+            this.btn_Stop.TabIndex = 0;
+            this.btn_Stop.Text = "停止";
+            this.btn_Stop.UseVisualStyleBackColor = true;
+            this.btn_Stop.Click += new System.EventHandler(this.btn_Stop_Click);
+            // 
+            // btn_wait60
+            // 
+            this.btn_wait60.Location = new System.Drawing.Point(118, 86);
+            this.btn_wait60.Name = "btn_wait60";
+            this.btn_wait60.Size = new System.Drawing.Size(75, 23);
+            this.btn_wait60.TabIndex = 0;
+            this.btn_wait60.Text = "开始";
+            this.btn_wait60.UseVisualStyleBackColor = true;
+            this.btn_wait60.Click += new System.EventHandler(this.btn_wait60_Click);
             // 
             // btn_TimeStart
             // 
@@ -399,6 +449,17 @@ namespace All_Test
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "控制台输出";
             // 
+            // list_log
+            // 
+            this.list_log.BackColor = System.Drawing.SystemColors.WindowText;
+            this.list_log.ForeColor = System.Drawing.SystemColors.Window;
+            this.list_log.Location = new System.Drawing.Point(6, 20);
+            this.list_log.Name = "list_log";
+            this.list_log.ReadOnly = true;
+            this.list_log.Size = new System.Drawing.Size(214, 235);
+            this.list_log.TabIndex = 1;
+            this.list_log.Text = "";
+            // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.label2);
@@ -484,8 +545,8 @@ namespace All_Test
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.tb_value);
             this.groupBox1.Controls.Add(this.btn_convert);
-            this.groupBox1.Controls.Add(this.lab_result);
             this.groupBox1.Controls.Add(this.button1);
             this.groupBox1.Location = new System.Drawing.Point(334, 172);
             this.groupBox1.Name = "groupBox1";
@@ -494,27 +555,28 @@ namespace All_Test
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "int转byte[]";
             // 
+            // tb_value
+            // 
+            this.tb_value.Location = new System.Drawing.Point(17, 26);
+            this.tb_value.Name = "tb_value";
+            this.tb_value.Size = new System.Drawing.Size(69, 21);
+            this.tb_value.TabIndex = 3;
+            this.tb_value.Text = "-90";
+            // 
             // btn_convert
             // 
             this.btn_convert.Location = new System.Drawing.Point(103, 56);
             this.btn_convert.Name = "btn_convert";
             this.btn_convert.Size = new System.Drawing.Size(75, 34);
             this.btn_convert.TabIndex = 2;
-            this.btn_convert.Text = "button3";
+            this.btn_convert.Text = "转换";
             this.btn_convert.UseVisualStyleBackColor = true;
             this.btn_convert.Click += new System.EventHandler(this.btn_convert_Click);
             // 
-            // lab_result
-            // 
-            this.lab_result.AutoSize = true;
-            this.lab_result.Location = new System.Drawing.Point(16, 29);
-            this.lab_result.Name = "lab_result";
-            this.lab_result.Size = new System.Drawing.Size(65, 12);
-            this.lab_result.TabIndex = 1;
-            this.lab_result.Text = "lab_result";
-            // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.groupBox12);
+            this.tabPage2.Controls.Add(this.groupBox11);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
@@ -523,26 +585,85 @@ namespace All_Test
             this.tabPage2.Text = "测试页2";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // btn_Stop
+            // groupBox12
             // 
-            this.btn_Stop.Location = new System.Drawing.Point(201, 57);
-            this.btn_Stop.Name = "btn_Stop";
-            this.btn_Stop.Size = new System.Drawing.Size(75, 23);
-            this.btn_Stop.TabIndex = 0;
-            this.btn_Stop.Text = "停止";
-            this.btn_Stop.UseVisualStyleBackColor = true;
-            this.btn_Stop.Click += new System.EventHandler(this.btn_Stop_Click);
+            this.groupBox12.Controls.Add(this.button2);
+            this.groupBox12.Location = new System.Drawing.Point(265, 17);
+            this.groupBox12.Name = "groupBox12";
+            this.groupBox12.Size = new System.Drawing.Size(210, 126);
+            this.groupBox12.TabIndex = 1;
+            this.groupBox12.TabStop = false;
+            this.groupBox12.Text = "groupBox12";
             // 
-            // list_log
+            // button2
             // 
-            this.list_log.BackColor = System.Drawing.SystemColors.WindowText;
-            this.list_log.ForeColor = System.Drawing.SystemColors.Window;
-            this.list_log.Location = new System.Drawing.Point(6, 20);
-            this.list_log.Name = "list_log";
-            this.list_log.ReadOnly = true;
-            this.list_log.Size = new System.Drawing.Size(214, 235);
-            this.list_log.TabIndex = 1;
-            this.list_log.Text = "";
+            this.button2.Location = new System.Drawing.Point(29, 36);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(80, 37);
+            this.button2.TabIndex = 3;
+            this.button2.Text = "Task.Run释放";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // groupBox11
+            // 
+            this.groupBox11.Controls.Add(this.tb_ServiceName);
+            this.groupBox11.Controls.Add(this.label7);
+            this.groupBox11.Controls.Add(this.btn_ServiceOpen);
+            this.groupBox11.Controls.Add(this.btn_ServiceClose);
+            this.groupBox11.Location = new System.Drawing.Point(6, 6);
+            this.groupBox11.Name = "groupBox11";
+            this.groupBox11.Size = new System.Drawing.Size(225, 137);
+            this.groupBox11.TabIndex = 0;
+            this.groupBox11.TabStop = false;
+            this.groupBox11.Text = "Windows服务";
+            // 
+            // tb_ServiceName
+            // 
+            this.tb_ServiceName.Location = new System.Drawing.Point(101, 29);
+            this.tb_ServiceName.Name = "tb_ServiceName";
+            this.tb_ServiceName.Size = new System.Drawing.Size(100, 21);
+            this.tb_ServiceName.TabIndex = 5;
+            this.tb_ServiceName.Text = "Windows 更新";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(20, 32);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(65, 12);
+            this.label7.TabIndex = 4;
+            this.label7.Text = "服务名称：";
+            // 
+            // btn_ServiceOpen
+            // 
+            this.btn_ServiceOpen.Location = new System.Drawing.Point(121, 74);
+            this.btn_ServiceOpen.Name = "btn_ServiceOpen";
+            this.btn_ServiceOpen.Size = new System.Drawing.Size(80, 37);
+            this.btn_ServiceOpen.TabIndex = 3;
+            this.btn_ServiceOpen.Text = "打开";
+            this.btn_ServiceOpen.UseVisualStyleBackColor = true;
+            this.btn_ServiceOpen.Click += new System.EventHandler(this.btn_ServiceOpen_Click);
+            // 
+            // btn_ServiceClose
+            // 
+            this.btn_ServiceClose.Location = new System.Drawing.Point(22, 74);
+            this.btn_ServiceClose.Name = "btn_ServiceClose";
+            this.btn_ServiceClose.Size = new System.Drawing.Size(80, 37);
+            this.btn_ServiceClose.TabIndex = 2;
+            this.btn_ServiceClose.Text = "关闭";
+            this.btn_ServiceClose.UseVisualStyleBackColor = true;
+            this.btn_ServiceClose.Click += new System.EventHandler(this.btn_ServiceClose_Click);
+            // 
+            // btn_Ticks
+            // 
+            this.btn_Ticks.Location = new System.Drawing.Point(22, 73);
+            this.btn_Ticks.Name = "btn_Ticks";
+            this.btn_Ticks.Size = new System.Drawing.Size(75, 23);
+            this.btn_Ticks.TabIndex = 1;
+            this.btn_Ticks.Text = "计时周期";
+            this.btn_Ticks.UseVisualStyleBackColor = true;
+            this.btn_Ticks.Click += new System.EventHandler(this.btn_Ticks_Click);
             // 
             // Form1
             // 
@@ -570,6 +691,10 @@ namespace All_Test
             this.groupBox2.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.tabPage2.ResumeLayout(false);
+            this.groupBox12.ResumeLayout(false);
+            this.groupBox11.ResumeLayout(false);
+            this.groupBox11.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -590,8 +715,7 @@ namespace All_Test
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Label lab_result;
+        private System.Windows.Forms.Button btn_TypeConverter;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.Button btn_Start;
         private System.Windows.Forms.GroupBox groupBox5;
@@ -620,6 +744,17 @@ namespace All_Test
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button btn_Stop;
         private System.Windows.Forms.RichTextBox list_log;
+        private System.Windows.Forms.TextBox tb_value;
+        private System.Windows.Forms.GroupBox groupBox11;
+        private System.Windows.Forms.TextBox tb_ServiceName;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Button btn_ServiceOpen;
+        private System.Windows.Forms.Button btn_ServiceClose;
+        private System.Windows.Forms.Button btn_Panse;
+        private System.Windows.Forms.Button btn_wait60;
+        private System.Windows.Forms.GroupBox groupBox12;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button btn_Ticks;
     }
 }
 

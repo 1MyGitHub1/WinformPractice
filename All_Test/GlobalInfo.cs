@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using All_Test.Serials;
 using System.Windows;
 using System.Timers;
+using All_Test.Enum;
 
 namespace All_Test
 {
@@ -17,6 +18,16 @@ namespace All_Test
             get { return _instance; }
         }
         private static readonly GlobalInfo _instance = new GlobalInfo();
+
+        public RunningState RunningStatus
+        {
+            get { return _RunningStatus; }
+            set
+            {
+                _RunningStatus = value;
+            }
+        }
+        private RunningState _RunningStatus;
 
         ///<summary>
         ///通信接口

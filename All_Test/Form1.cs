@@ -1,5 +1,7 @@
-﻿using All_Test.Serials;
+﻿using All_Test.Enum;
+using All_Test.Serials;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,6 +14,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Threading.Tasks.Schedulers;
 using System.Timers;
 using System.Windows.Forms;
 using Timer = System.Timers.Timer;
@@ -23,8 +26,7 @@ namespace All_Test
         public Form1()
         {
             InitializeComponent();
-
-            GlobalInfo.Instance.Totalab_LSerials.MsgCome += Sampler_MsgCome;
+            //GlobalInfo.Instance.Totalab_LSerials.MsgCome += Sampler_MsgCome;
 
         }
 
@@ -117,7 +119,7 @@ namespace All_Test
         //保存
         private void btn_file_Click(object sender, EventArgs e)
         {
-            string SavePath = System.IO.Path.Combine(AssemblyDirectory,"Parameters","SamplerPos.ini");
+            string SavePath = System.IO.Path.Combine(AssemblyDirectory, "Parameters", "SamplerPos.ini");
             string path = System.IO.Path.Combine(AssemblyDirectory, "Parameters");
             if (!Directory.Exists(path))
             {
@@ -127,7 +129,7 @@ namespace All_Test
 
             ////封装对象信息
             StudentInfo sto = new StudentInfo();
-            if (textBox_name.Text!=""&& textBox_age.Text!="")
+            if (textBox_name.Text != "" && textBox_age.Text != "")
             {
                 sto.name = textBox_name.Text;
                 sto.age = int.Parse(textBox_age.Text);
@@ -186,8 +188,8 @@ namespace All_Test
         public byte[] intToBytes(int value)
         {
             byte[] src = new byte[4];
-
-            if (value<0)  // value > 0
+            //float val = Math.Abs(values) * (-1);
+            if (value < 0)  // value > 0
             {
                 src[3] = (byte)((value >> 24) & 0xFF);                                              //0,1,0,0
                 src[2] = (byte)((value >> 16) & 0xFF);                                              //14,58,0,0
@@ -210,7 +212,7 @@ namespace All_Test
             //byte[] b = intToBytes(14862);
             //byte[] c = intToBytes(-995);
             //byte[] d = intToBytes(8039);
-            byte[] q = intToBytes(90);
+            byte[] q = intToBytes(Convert.ToInt16(tb_value.Text));
 
             //string result1 = a[0].ToString() + "," + a[1].ToString() + "," + a[2].ToString() + "," + a[3].ToString();
             //string result2 = b[0].ToString() + "," + b[1].ToString() + "," + b[2].ToString() + "," + b[3].ToString();
@@ -246,6 +248,9 @@ namespace All_Test
                 nVolume3 = (byte)(volume % 16777216 % 65536 / 256);
                 nVolume4 = (byte)(volume % 16777216 % 65536 % 256);
             }
+            byte[] by = BitConverter.GetBytes(90.0);
+            Console.WriteLine("1:" + by[0] + ",2:" + by[1] + ",3:" + by[2] + ",4:" + by[3]);
+
             //else
             //{
             //    nVolume1 = (byte)((volume & 0xFF000000) >> 8 >> 8 >> 8);
@@ -594,70 +599,70 @@ namespace All_Test
                         //}
                         break;
                     case 0x22:
-                    //    if (e.Msg.DataLength == 12)
-                    //        GlobalInfo.Instance.RunningStep = RunningStep_Status.XYZHomeOk;
-                    //    if (_IsFirst)
-                    //    {
-                    //        GlobalInfo.Instance.TrayPanelHomeX = (e.Msg.Data[3] * 16777216 + e.Msg.Data[2] * 65536 + e.Msg.Data[1] * 256 + e.Msg.Data[0]) / 3600.0 * GlobalInfo.XLengthPerCircle;
-                    //        GlobalInfo.Instance.TrayPanelHomeW = e.Msg.Data[7] * 16777216 + e.Msg.Data[6] * 65536 + e.Msg.Data[5] * 256 + e.Msg.Data[4];
-                    //        GlobalInfo.Instance.TrayPanelHomeZ = (e.Msg.Data[11] * 16777216 + e.Msg.Data[10] * 65536 + e.Msg.Data[9] * 256 + e.Msg.Data[8]) / 3600.0 * GlobalInfo.ZLengthPerCircle;
-                    //        //MainLogHelper.Instance.Info("返回当前的位置：" + GlobalInfo.Instance.TrayPanelHomeX + "---" + GlobalInfo.Instance.TrayPanelHomeW + "---" + GlobalInfo.Instance.TrayPanelHomeZ);
-                    //        GlobalInfo.Instance.Totalab_LSerials.ReadMotorPosition((byte)0x01);
+                        //    if (e.Msg.DataLength == 12)
+                        //        GlobalInfo.Instance.RunningStep = RunningStep_Status.XYZHomeOk;
+                        //    if (_IsFirst)
+                        //    {
+                        //        GlobalInfo.Instance.TrayPanelHomeX = (e.Msg.Data[3] * 16777216 + e.Msg.Data[2] * 65536 + e.Msg.Data[1] * 256 + e.Msg.Data[0]) / 3600.0 * GlobalInfo.XLengthPerCircle;
+                        //        GlobalInfo.Instance.TrayPanelHomeW = e.Msg.Data[7] * 16777216 + e.Msg.Data[6] * 65536 + e.Msg.Data[5] * 256 + e.Msg.Data[4];
+                        //        GlobalInfo.Instance.TrayPanelHomeZ = (e.Msg.Data[11] * 16777216 + e.Msg.Data[10] * 65536 + e.Msg.Data[9] * 256 + e.Msg.Data[8]) / 3600.0 * GlobalInfo.ZLengthPerCircle;
+                        //        //MainLogHelper.Instance.Info("返回当前的位置：" + GlobalInfo.Instance.TrayPanelHomeX + "---" + GlobalInfo.Instance.TrayPanelHomeW + "---" + GlobalInfo.Instance.TrayPanelHomeZ);
+                        //        GlobalInfo.Instance.Totalab_LSerials.ReadMotorPosition((byte)0x01);
 
-                    //    }
-                    //    break;
-                    //case 0xee:
-                    //    if (e.Msg.Data[1] == 0x01)
-                    //        GlobalInfo.Instance.IsMotorXError = true;
-                    //    else if (e.Msg.Data[1] == 0x02)
-                    //        GlobalInfo.Instance.IsMotorWError = true;
-                    //    else if (e.Msg.Data[1] == 0x03)
-                    //        GlobalInfo.Instance.IsMotorZError = true;
-                    //    if (e.Msg.Data[2] == 0xe1)
-                    //    {
-                    //        this.Dispatcher.Invoke((Action)(() =>
-                    //        {
-                    //            GlobalInfo.Instance.LogInfo.Insert(0, DateTime.Now.ToString("hh:mm:ss") + "复位出错");
-                    //        }));
-                    //    }
-                    //    else if (e.Msg.Data[2] == 0xe2)
-                    //    {
-                    //        this.Dispatcher.Invoke((Action)(() =>
-                    //        {
-                    //            GlobalInfo.Instance.LogInfo.Insert(0, DateTime.Now.ToString("hh:mm:ss") + "追随错误");
-                    //        }));
-                    //    }
-                    //    else if (e.Msg.Data[2] == 0xe3)
-                    //    {
-                    //        this.Dispatcher.Invoke((Action)(() =>
-                    //        {
-                    //            GlobalInfo.Instance.LogInfo.Insert(0, DateTime.Now.ToString("hh:mm:ss") + "位置超限");
-                    //        }));
-                    //    }
-                    //    GlobalInfo.Instance.RunningStep = RunningStep_Status.Error;
-                    //    this.Dispatcher.Invoke((Action)(() =>
-                    //    {
-                    //        StatusColors = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFF44336"));
-                    //        StatusText = "Error";
-                    //    }));
-                    //    CancellationTokenSource source = new CancellationTokenSource();
-                    //    Task.Factory.StartNew(() =>
-                    //    {
-                    //        GlobalInfo.Instance.Totalab_LSerials.SetLightStatus(0x00, 0x07);
-                    //        Thread.Sleep(100);
-                    //        GlobalInfo.Instance.Totalab_LSerials.SetLightStatus(0x02, 0x03);
-                    //        Thread.Sleep(100);
-                    //        if (Control_SampleListView.IsRunningFlow)
-                    //            Control_SampleListView.ThreadStop();
-                    //        else
-                    //        {
-                    //            bool result = MotorActionHelper.MotorErrorStopImmediately();
-                    //            if (result == false)
-                    //            {
-                    //                ConntectWaring();
-                    //            }
-                    //        }
-                    //    }, source.Token);
+                        //    }
+                        //    break;
+                        //case 0xee:
+                        //    if (e.Msg.Data[1] == 0x01)
+                        //        GlobalInfo.Instance.IsMotorXError = true;
+                        //    else if (e.Msg.Data[1] == 0x02)
+                        //        GlobalInfo.Instance.IsMotorWError = true;
+                        //    else if (e.Msg.Data[1] == 0x03)
+                        //        GlobalInfo.Instance.IsMotorZError = true;
+                        //    if (e.Msg.Data[2] == 0xe1)
+                        //    {
+                        //        this.Dispatcher.Invoke((Action)(() =>
+                        //        {
+                        //            GlobalInfo.Instance.LogInfo.Insert(0, DateTime.Now.ToString("hh:mm:ss") + "复位出错");
+                        //        }));
+                        //    }
+                        //    else if (e.Msg.Data[2] == 0xe2)
+                        //    {
+                        //        this.Dispatcher.Invoke((Action)(() =>
+                        //        {
+                        //            GlobalInfo.Instance.LogInfo.Insert(0, DateTime.Now.ToString("hh:mm:ss") + "追随错误");
+                        //        }));
+                        //    }
+                        //    else if (e.Msg.Data[2] == 0xe3)
+                        //    {
+                        //        this.Dispatcher.Invoke((Action)(() =>
+                        //        {
+                        //            GlobalInfo.Instance.LogInfo.Insert(0, DateTime.Now.ToString("hh:mm:ss") + "位置超限");
+                        //        }));
+                        //    }
+                        //    GlobalInfo.Instance.RunningStep = RunningStep_Status.Error;
+                        //    this.Dispatcher.Invoke((Action)(() =>
+                        //    {
+                        //        StatusColors = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFF44336"));
+                        //        StatusText = "Error";
+                        //    }));
+                        //    CancellationTokenSource source = new CancellationTokenSource();
+                        //    Task.Factory.StartNew(() =>
+                        //    {
+                        //        GlobalInfo.Instance.Totalab_LSerials.SetLightStatus(0x00, 0x07);
+                        //        Thread.Sleep(100);
+                        //        GlobalInfo.Instance.Totalab_LSerials.SetLightStatus(0x02, 0x03);
+                        //        Thread.Sleep(100);
+                        //        if (Control_SampleListView.IsRunningFlow)
+                        //            Control_SampleListView.ThreadStop();
+                        //        else
+                        //        {
+                        //            bool result = MotorActionHelper.MotorErrorStopImmediately();
+                        //            if (result == false)
+                        //            {
+                        //                ConntectWaring();
+                        //            }
+                        //        }
+                        //    }, source.Token);
                         break;
                     default:
                         break;
@@ -665,7 +670,7 @@ namespace All_Test
             }
             catch (Exception ex)
             {
-                
+
             }
         }
 
@@ -764,13 +769,13 @@ namespace All_Test
                     //任务结束
                     Console.WriteLine("Task finished!");
                 }
-            },token);
+            }, token);
 
             while (true)
             {
                 Console.WriteLine("请切换到英文输入法！");
                 Console.WriteLine("取消任务请按W键");
-                if (Console.ReadKey().Key ==ConsoleKey.W)
+                if (Console.ReadKey().Key == ConsoleKey.W)
                 {
                     tokenSource.Cancel();
                 }
@@ -798,8 +803,8 @@ namespace All_Test
             //运行的总秒数
             Console.WriteLine("success!");
             Console.WriteLine($"运行时间为：{timeSpan.TotalSeconds}秒");
-            LogShow("运行时间为："+ timeSpan.TotalSeconds + "秒");
-            
+            LogShow("运行时间为：" + timeSpan.TotalSeconds + "秒");
+
             //Console.ReadKey();
         }
         #endregion
@@ -812,52 +817,52 @@ namespace All_Test
         /// <param name="e"></param>
         private void btn_reflect_Click(object sender, EventArgs e)
         {
-                //1、反射基本的类 获取属性及方法
-                Type type = typeof(Person);
-                Console.WriteLine("类型名:" + type.Name);
+            //1、反射基本的类 获取属性及方法
+            Type type = typeof(Person);
+            Console.WriteLine("类型名:" + type.Name);
 
-                Console.WriteLine("类全名：" + type.FullName);
+            Console.WriteLine("类全名：" + type.FullName);
 
-                Console.WriteLine("命名空间名:" + type.Namespace);
+            Console.WriteLine("命名空间名:" + type.Namespace);
 
-                Console.WriteLine("程序集名：" + type.Assembly);
+            Console.WriteLine("程序集名：" + type.Assembly);
 
-                Console.WriteLine("模块名:" + type.Module);
+            Console.WriteLine("模块名:" + type.Module);
 
-                Console.WriteLine("基类名：" + type.BaseType);
+            Console.WriteLine("基类名：" + type.BaseType);
 
-                Console.WriteLine("是否类：" + type.IsClass);
+            Console.WriteLine("是否类：" + type.IsClass);
 
-                Console.WriteLine("类的公共成员(Public)：");
+            Console.WriteLine("类的公共成员(Public)：");
 
-                MemberInfo[] memberInfos = type.GetMembers();//得到所有公共成员
-                foreach (var item in memberInfos)
-                {
-                    Console.WriteLine(string.Format("{0}:{1}", item.MemberType, item));
+            MemberInfo[] memberInfos = type.GetMembers();//得到所有公共成员
+            foreach (var item in memberInfos)
+            {
+                Console.WriteLine(string.Format("{0}:{1}", item.MemberType, item));
 
-                }
-                Console.WriteLine("类的公共属性(Public)：");
-                PropertyInfo[] Propertys = type.GetProperties();
-                foreach (PropertyInfo fi in Propertys)
-                {
-                    Console.WriteLine(fi.Name);
-                }
+            }
+            Console.WriteLine("类的公共属性(Public)：");
+            PropertyInfo[] Propertys = type.GetProperties();
+            foreach (PropertyInfo fi in Propertys)
+            {
+                Console.WriteLine(fi.Name);
+            }
 
-                Console.WriteLine("类的公共方法(Public)：");
-                MethodInfo[] mis = type.GetMethods();
-                foreach (MethodInfo mi in mis)
-                {
-                    Console.WriteLine(mi.ReturnType + " " + mi.Name);
-                }
+            Console.WriteLine("类的公共方法(Public)：");
+            MethodInfo[] mis = type.GetMethods();
+            foreach (MethodInfo mi in mis)
+            {
+                Console.WriteLine(mi.ReturnType + " " + mi.Name);
+            }
 
-                Console.WriteLine("类的公共字段(Public)：");
-                FieldInfo[] fis = type.GetFields();
-                foreach (FieldInfo fi in fis)
-                {
-                    Console.WriteLine(fi.Name);
-                }
+            Console.WriteLine("类的公共字段(Public)：");
+            FieldInfo[] fis = type.GetFields();
+            foreach (FieldInfo fi in fis)
+            {
+                Console.WriteLine(fi.Name);
+            }
 
-                //Console.ReadKey();
+            //Console.ReadKey();
         }
         /// <summary>
         /// 利用发射创建对象并调用相应的方法 （System.Reflection.Assembly）：
@@ -919,7 +924,7 @@ namespace All_Test
             public override void Speak()
             {
                 Name = "反射";
-                Console.WriteLine("我的名字是：" + Name +"  " + "学号是：" + GetStudentNo());
+                Console.WriteLine("我的名字是：" + Name + "  " + "学号是：" + GetStudentNo());
             }
 
             public string GetStudentNo()
@@ -934,7 +939,7 @@ namespace All_Test
 
         private void btn_TimeStart_Click(object sender, EventArgs e)
         {
-            if (tb_times.Text!="")
+            if (tb_times.Text != "")
             {
                 TestTimer(long.Parse(tb_times.Text));
             }
@@ -979,9 +984,10 @@ namespace All_Test
             //Console.WriteLine(frameArray[3] + "\n" + frameArray[2] + "\n" + frameArray[1] + "\n" + frameArray[0] + "\n");
 
             ////四字节float类型转byte 方法1：
-            if (tb_floatValue.Text !="")
+            if (tb_floatValue.Text != "")
             {
                 byte[] bytes = BitConverter.GetBytes(float.Parse(tb_floatValue.Text));
+                LogShow(bytes[0].ToString() + "," + bytes[1].ToString() + "," + bytes[2].ToString() + "," + bytes[3].ToString());
                 Console.WriteLine(bytes[0] + "\n" + bytes[1] + "\n" + bytes[2] + "\n" + bytes[3] + "\n");
                 //Array.Reverse(bytes);
                 //Console.WriteLine(bytes[0] + "\n" + bytes[1] + "\n" + bytes[2] + "\n" + bytes[3] + "\n");
@@ -1002,7 +1008,7 @@ namespace All_Test
             Console.WriteLine(accum);
 
             byte[] arr = new byte[] { 0x42, 0xB4, 0x00, 0x00 };
-            Console.WriteLine( BitConverter.ToSingle(arr, 0).ToString());
+            Console.WriteLine(BitConverter.ToSingle(arr, 0).ToString());
             Array.Reverse(arr);
             if (BitConverter.ToUInt32(arr, 0) == 0x42B40000)
             {
@@ -1029,10 +1035,10 @@ namespace All_Test
 
         private void btn_TimerTest_Click(object sender, EventArgs e)
         {
-            WaitFunctions(5);
+            WaitFunctions(Convert.ToInt32(tb_min.Text));
 
-            Thread thread= new Thread(WaitMin);
-            thread.Start();
+            //Thread thread = new Thread(WaitMin);
+            //thread.Start();
         }
         public void WaitFunctions(int waitTime)
         {
@@ -1040,7 +1046,7 @@ namespace All_Test
 
             Console.WriteLine("开始执行 ...");
             DateTime nowTimer = DateTime.Now;
-            Console.WriteLine("开始时间："+ nowTimer);
+            Console.WriteLine("开始时间：" + nowTimer);
             int interval = 0;
             while (interval < waitTime)
             {
@@ -1054,6 +1060,27 @@ namespace All_Test
             DateTime endTimer = DateTime.Now;
             Console.WriteLine("结束时间：" + endTimer);
             Console.WriteLine(waitTime + "秒后继续 ...");
+
+            #region 方式二
+            //var oj = BeginInvoke((Action)(() =>
+            //{
+            //    while (true)
+            //    {
+            //        TimeSpan spand = DateTime.Now - nowTimer;
+            //        Thread.Sleep(500);
+            //        if (spand.Seconds == 10)
+            //        {
+            //            Console.WriteLine(spand.Seconds + "秒");
+            //        }
+            //        else { break; }
+            //    }
+            //}));
+            //if (oj.IsCompleted)
+            //{
+            //    Console.WriteLine("运行完成");
+            //}
+            #endregion
+
         }
 
         public void WaitMin()
@@ -1066,30 +1093,83 @@ namespace All_Test
                 Thread.Sleep(200);
                 delaySeconds = (DateTime.Now.Ticks / 10000 - min) / 1000;
             }
-            Console.WriteLine("分钟数到："+ DateTime.Now);
+            Console.WriteLine("分钟数到：" + DateTime.Now);
+        }
+        public async void WaitMin2()
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                int interval = 0;
+                var scheduler = new LimitedConcurrencyLevelTaskScheduler(1);
+                await Task.Factory.StartNew(() => {
+                    while (interval < 10)
+                    {
+                        Thread.Sleep(1000);
+                        interval++;
+                        LogShow(interval.ToString());
+                        //TimeSpan spand = DateTime.Now - startTimer;
+                        //if (interval != spand.Seconds)
+                        //{
+                        //    interval = spand.Seconds;
+                        //    //Console.WriteLine(interval + "秒");
+                        //}
+                        while (GlobalInfo.Instance.RunningStatus == RunningState.Pause)
+                        {
+                            interval = 0;
+                            Thread.Sleep(100);
+                        }
+                    };
+                }, CancellationToken.None, TaskCreationOptions.None, scheduler);
+                
+                LogShow("一分钟后执行"+ Task.CurrentId.ToString());
+            }
+        }
+        private void btn_wait60_Click(object sender, EventArgs e)
+        {
+            LogShow("执行开始");
+            if (GlobalInfo.Instance.RunningStatus == RunningState.Pause)
+            {
+                GlobalInfo.Instance.RunningStatus = RunningState.Start;
+            }
+            else
+            {
+                GlobalInfo.Instance.RunningStatus = RunningState.Start;
+                WaitMin2();
+            }
+        }
+
+        private void btn_Panse_Click(object sender, EventArgs e)
+        {
+            LogShow("已暂停");
+            GlobalInfo.Instance.RunningStatus = RunningState.Pause;
         }
         #endregion
 
         #region modbus用到的字节转换
         private void btn_modbus_Click(object sender, EventArgs e)
         {
-            CmdMsg msg11=new CmdMsg();
-            byte[] bytes = { 0x01 ,0x10, 0x00 ,0x02 ,0x00, 0x02,0xE0, 0x08 };
+            CmdMsg msg11 = new CmdMsg();
+            byte[] bytes = { 0x01, 0x10, 0x00, 0x02, 0x00, 0x02, 0xE0, 0x08 };
             //GetMsg1(bytes, msg11);
 
             byte[] byte8_arry = { 0x01, 0x00 };
+            byte[] byte4_arry = { 0x00, 0x00,0xb4, 0xc2};
             Array.Reverse(byte8_arry);
-            UInt16 word16 = BitConverter.ToUInt16(byte8_arry,0);
-            //float word4 = BitConverter.ToSingle(byte8_arry, 0);
+            UInt16 word16 = BitConverter.ToUInt16(byte8_arry, 0);
+            float word4 = BitConverter.ToSingle(byte4_arry, 0);
+            if (word4 == -90)
+            {
+                LogShow(word4.ToString());
+            }
             if (word16 == 0x0100)
             {
                 Console.WriteLine(word16);
 
 
                 byte[] BY = GlobalInfo.intToBytes(word16);
-                Console.WriteLine(BY[0]+" "+ BY[1] + " "+ BY[2] + " "+ BY[3] + " ");
+                Console.WriteLine(BY[0] + " " + BY[1] + " " + BY[2] + " " + BY[3] + " ");
                 UInt16 w = BitConverter.ToUInt16(BY, 0);
-                Console.WriteLine("BY:"+ w);
+                Console.WriteLine("BY:" + w);
                 byte[] BY2 = GlobalInfo.intToBytes2(word16);
                 Console.WriteLine(BY2[0] + " " + BY2[1] + " " + BY2[2] + " " + BY2[3] + " ");
                 UInt16 w2 = BitConverter.ToUInt16(BY2, 0);
@@ -1099,8 +1179,221 @@ namespace All_Test
         }
 
 
+
         #endregion
 
+        #region modbus----CRC校验
+        private void btn_TypeConverter_Click(object sender, EventArgs e)
+        {
+            //float values = 20.0f;
+            //byte[] bytes = BitConverter.GetBytes(values);
+            //byte[] frameArray = new byte[13];
+            //frameArray[0] = 0x01;
+            //frameArray[1] = 0x10;
+            //frameArray[2] = 0x00;
+            //frameArray[3] = 0x02;
+            //frameArray[4] = 0x00;
+            //frameArray[5] = 0x02;
+            //frameArray[6] = 0x04;
+            //frameArray[7] = bytes[3];
+            //frameArray[8] = bytes[2];
+            //frameArray[9] = bytes[1];
+            //frameArray[10] = bytes[0];
+            //UInt16 CRC = CRCverify(frameArray, 11);
+            //frameArray[11] = (byte)(CRC & 0xff);
+            //frameArray[12] = (byte)((CRC >> 8) & 0xff);
 
+
+
+            //Object Parameter=new List<int> { 1,2,3,4};
+            //if (Parameter is List<int> analysisTypeList1)
+            //{
+            //    List<int> List2=((IEnumerable)Parameter).Cast<int>().ToList();
+            //    foreach (int i in List2) 
+            //    {
+            //        LogShow(i.ToString());
+            //    }
+
+            //}
+
+        }
+
+        /// <summary>
+        /// modbus----CRC校验
+        /// </summary>
+        /// <param name="bufData"></param>
+        /// <param name="buflen"></param>
+        /// <returns></returns>
+        UInt16 CRCverify(byte[] bufData, UInt16 buflen)
+        {
+            UInt16 TCPCRC = 0xffff;
+            UInt16 POLYNOMIAL = 0xa001;
+            UInt16 i, j;
+
+            for (i = 0; i < buflen; i++)
+            {
+                TCPCRC ^= bufData[i];
+                for (j = 0; j < 8; j++)
+                {
+                    if ((TCPCRC & 0x0001) != 0)
+                    {
+                        TCPCRC >>= 1;
+                        TCPCRC ^= POLYNOMIAL;
+                    }
+                    else
+                    {
+                        TCPCRC >>= 1;
+                    }
+                }
+            }
+            return TCPCRC;
+        }
+
+        #endregion
+
+        #region 字符串换行显示
+        private void StrTest()
+        {
+            string str = "附件二哦i阿娇佛奥马尔发i";
+            if (str.Length > 5)
+            {
+                str = str.Insert(5, "\n");
+            }
+            Console.WriteLine(str);
+
+        }
+        #endregion
+
+        #region 开启/停止Windows服务
+        /// <summary>
+        /// 关闭服务
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btn_ServiceClose_Click(object sender, EventArgs e)
+        {
+            //string windowsServiceName = "Windows 更新";
+            string windowsServiceName = tb_ServiceName.Text;
+            StopWindowsService(windowsServiceName);
+        }
+        /// <summary>
+        /// 开启服务
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btn_ServiceOpen_Click(object sender, EventArgs e)
+        {
+            string windowsServiceName = tb_ServiceName.Text;
+            StartWindowsService(windowsServiceName);
+        }
+        /// <summary>
+        /// 开启服务
+        /// </summary>
+        /// <param name="windowsServiceName">服务名称</param>
+        private void StartWindowsService(string windowsServiceName)
+        {
+            using (System.ServiceProcess.ServiceController control = new System.ServiceProcess.ServiceController(windowsServiceName))
+            {
+                if (control.Status == System.ServiceProcess.ServiceControllerStatus.Stopped)
+                {
+                    Console.WriteLine("服务启动......");
+                    control.Start();
+                    Console.WriteLine("服务已经启动......");
+                }
+                else if (control.Status == System.ServiceProcess.ServiceControllerStatus.Running)
+                {
+                    Console.WriteLine("服务已经启动......");
+                }
+            }
+
+        }
+
+        /// <summary>
+        /// 停止服务
+        /// </summary>
+        /// <param name="windowsServiceName">服务名称</param>
+        private void StopWindowsService(string windowsServiceName)
+        {
+            using (System.ServiceProcess.ServiceController control = new System.ServiceProcess.ServiceController(windowsServiceName))
+            {
+                if (control.Status == System.ServiceProcess.ServiceControllerStatus.Running)
+                {
+                    Console.WriteLine("服务停止......");
+                    LogShow("服务停止......");
+                    control.Stop();
+                    Console.WriteLine("服务已经停止......");
+                    LogShow("服务已经停止......");
+                }
+                else if (control.Status == System.ServiceProcess.ServiceControllerStatus.Stopped)
+                {
+                    LogShow("服务已经停止......");
+                    Console.WriteLine("服务已经停止......");
+                }
+            }
+        }
+
+
+
+        #endregion
+
+        #region Task.Run资源释放
+        private void button2_Click(object sender, EventArgs e)
+        {
+            while (true)
+            { 
+                sourceDis();
+                Thread.Sleep(1000);
+            }
+        }
+        public async void sourceDis()
+        {
+            CancellationTokenSource source = new CancellationTokenSource();
+            int interval = 0;
+            await Task.Factory.StartNew(() => {
+                try
+                {
+                    while (interval < 60)
+                    {
+                        Thread.Sleep(1000);
+                        interval++;
+                        //TimeSpan spand = DateTime.Now - startTimer;
+                        //if (interval != spand.Seconds)
+                        //{
+                        //    interval = spand.Seconds;
+                        //    //Console.WriteLine(interval + "秒");
+                        //}
+
+                    }
+                    
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("RunningStatus.LoadSample_VibrationMotorOpenOK" + ex.ToString());
+                }
+                finally
+                {
+                    Console.WriteLine("1分钟" + interval);
+                    source.Cancel();
+                    source.Dispose();
+                }
+            }, source.Token);
+        }
+        #endregion
+
+        #region DateTime.Time. Ticks
+
+        private void btn_Ticks_Click(object sender, EventArgs e)
+        {
+            //long str = DateTime.Now.Ticks/10000000;
+            DateTime str = DateTime.Now;
+            Console.WriteLine(str);
+            Thread.Sleep(5000);
+            DateTime str1 = DateTime.Now;
+            Console.WriteLine(str1);
+            TimeSpan timeSpan = str1 - str;
+            Console.WriteLine(timeSpan.ToString(@"hh\:mm\:ss"));
+        }
+
+        #endregion
     }
 }
