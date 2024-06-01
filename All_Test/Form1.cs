@@ -1497,14 +1497,6 @@ namespace All_Test
             }
             Console.WriteLine(str);
 
-            //Match match = Regex.Match(str, pattern);
-            //if (match.Success)
-            //{
-            //    // 提取从起始字符到结束字符的内容
-            //    string result = match.Groups[1].Value;
-            //    Console.WriteLine(result);
-            //}
-
 
             #region MyRegion
             //string Text = "http://192.168.0.1:2008";
