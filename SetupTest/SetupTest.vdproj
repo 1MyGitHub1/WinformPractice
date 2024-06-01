@@ -118,13 +118,13 @@
         "Entry"
         {
         "MsmKey" = "8:_C1578BD58A9D73F99E78A96A50D2F208"
-        "OwnerKey" = "8:_F57B333338CC4F8DA1534814131FA5EE"
+        "OwnerKey" = "8:_C6F63B54665F4406A9E1689BB9E31CF9"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_C1578BD58A9D73F99E78A96A50D2F208"
-        "OwnerKey" = "8:_C6F63B54665F4406A9E1689BB9E31CF9"
+        "OwnerKey" = "8:_F57B333338CC4F8DA1534814131FA5EE"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -148,18 +148,6 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_95408E26E96BC9353D54466AAC1A3965"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_C6F63B54665F4406A9E1689BB9E31CF9"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_F57B333338CC4F8DA1534814131FA5EE"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -167,12 +155,6 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_40A0BD49AA39E613C22AF6DEC5BD6222"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_C1578BD58A9D73F99E78A96A50D2F208"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -235,6 +217,24 @@
         "OwnerKey" = "8:_16B0A4EE09517E1EA28B6675960A793D"
         "MsmSig" = "8:_UNDEFINED"
         }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_95408E26E96BC9353D54466AAC1A3965"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_C6F63B54665F4406A9E1689BB9E31CF9"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_C1578BD58A9D73F99E78A96A50D2F208"
+        "MsmSig" = "8:_UNDEFINED"
+        }
     }
     "Configurations"
     {
@@ -253,6 +253,22 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                }
+            }
         }
         "Release"
         {
@@ -269,6 +285,22 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                }
+            }
         }
     }
     "Deployable"
@@ -287,7 +319,7 @@
             "Sequence" = "3:1"
             "Identifier" = "8:_D24E34F9_4FD4_41F9_97B2_9F61E9715D4D"
             "InstallerClass" = "11:TRUE"
-            "CustomActionData" = "8:"
+            "CustomActionData" = "8:/customData=[BUTTON2]"
             }
         }
         "DefaultFeature"
@@ -792,7 +824,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:SetupTest"
         "ProductCode" = "8:{5731E2B4-AADE-4058-874B-0ED0FA3F300B}"
-        "PackageCode" = "8:{DDB5EDA2-0BE2-429C-9BC0-44CED5F912FD}"
+        "PackageCode" = "8:{C5028726-8675-44E4-BE03-702F093329DA}"
         "UpgradeCode" = "8:{C85D114A-E920-4DE4-AD4C-A509CD767C69}"
         "AspNetVersion" = "8:"
         "RestartWWWService" = "11:FALSE"
@@ -800,12 +832,12 @@
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
         "ProductVersion" = "8:1.0.0"
-        "Manufacturer" = "8:2437688042@qq.com"
+        "Manufacturer" = "8:Test"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
         "Title" = "8:SetupTest"
         "Subject" = "8:"
-        "ARPCONTACT" = "8:2437688042@qq.com"
+        "ARPCONTACT" = "8:Test"
         "Keywords" = "8:"
         "ARPCOMMENTS" = "8:"
         "ARPURLINFOABOUT" = "8:"
@@ -912,6 +944,20 @@
         }
         "Shortcut"
         {
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_1F741E9E07F24C698B3038483CF0E22A"
+            {
+            "Name" = "8:All_TestWorkStation"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_F57B333338CC4F8DA1534814131FA5EE"
+            "Folder" = "8:_D6458030B4E34538823A49C23FAA94FF"
+            "WorkingFolder" = "8:_506FFF6C31404DDDA328A7E085688B7E"
+            "Icon" = "8:"
+            "Feature" = "8:"
+            }
         }
         "UserInterface"
         {
@@ -970,48 +1016,13 @@
                             }
                         }
                     }
-                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_A817D4FF032B47D0AF7F3A78EE95B21E"
+                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_C61CDF23DEF74A0F963138DDFB0C1CA8"
                     {
                     "Sequence" = "3:200"
-                    "DisplayName" = "8:安装文件夹"
+                    "DisplayName" = "8:RadioButton  (两个按钮)"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
-                    "SourcePath" = "8:<VsdDialogDir>\\VsdFolderDlg.wid"
-                        "Properties"
-                        {
-                            "BannerBitmap"
-                            {
-                            "Name" = "8:BannerBitmap"
-                            "DisplayName" = "8:#1001"
-                            "Description" = "8:#1101"
-                            "Type" = "3:8"
-                            "ContextData" = "8:Bitmap"
-                            "Attributes" = "3:4"
-                            "Setting" = "3:1"
-                            "UsePlugInResources" = "11:TRUE"
-                            }
-                            "InstallAllUsersVisible"
-                            {
-                            "Name" = "8:InstallAllUsersVisible"
-                            "DisplayName" = "8:#1059"
-                            "Description" = "8:#1159"
-                            "Type" = "3:5"
-                            "ContextData" = "8:1;True=1;False=0"
-                            "Attributes" = "3:0"
-                            "Setting" = "3:0"
-                            "Value" = "3:1"
-                            "DefaultValue" = "3:1"
-                            "UsePlugInResources" = "11:TRUE"
-                            }
-                        }
-                    }
-                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_D2D20D1B7CDA47DFB3A95612D3B53FAE"
-                    {
-                    "Sequence" = "3:400"
-                    "DisplayName" = "8:文本框  (A)"
-                    "UseDynamicProperties" = "11:TRUE"
-                    "IsDependency" = "11:FALSE"
-                    "SourcePath" = "8:<VsdDialogDir>\\VsdCustomText1Dlg.wid"
+                    "SourcePath" = "8:<VsdDialogDir>\\VsdCustom2ButtonDlg.wid"
                         "Properties"
                         {
                             "BannerBitmap"
@@ -1046,211 +1057,116 @@
                             "Type" = "3:3"
                             "ContextData" = "8:"
                             "Attributes" = "3:0"
-                            "Setting" = "3:1"
-                            "Value" = "8:#1215"
+                            "Setting" = "3:2"
+                            "Value" = "8:请选择安装方式"
                             "DefaultValue" = "8:#1215"
                             "UsePlugInResources" = "11:TRUE"
                             }
-                            "Edit1Label"
+                            "Button1Label"
                             {
-                            "Name" = "8:Edit1Label"
-                            "DisplayName" = "8:#1046"
-                            "Description" = "8:#1146"
+                            "Name" = "8:Button1Label"
+                            "DisplayName" = "8:#1022"
+                            "Description" = "8:#1122"
+                            "Type" = "3:3"
+                            "ContextData" = "8:"
+                            "Attributes" = "3:0"
+                            "Setting" = "3:2"
+                            "Value" = "8:独立安装"
+                            "DefaultValue" = "8:#1222"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "Button1Value"
+                            {
+                            "Name" = "8:Button1Value"
+                            "DisplayName" = "8:#1018"
+                            "Description" = "8:#1118"
                             "Type" = "3:3"
                             "ContextData" = "8:"
                             "Attributes" = "3:0"
                             "Setting" = "3:1"
-                            "Value" = "8:#1246"
-                            "DefaultValue" = "8:#1246"
+                            "Value" = "8:1"
+                            "DefaultValue" = "8:1"
                             "UsePlugInResources" = "11:TRUE"
                             }
-                            "Edit1Property"
+                            "Button2Label"
                             {
-                            "Name" = "8:Edit1Property"
-                            "DisplayName" = "8:#1050"
-                            "Description" = "8:#1150"
+                            "Name" = "8:Button2Label"
+                            "DisplayName" = "8:#1023"
+                            "Description" = "8:#1123"
+                            "Type" = "3:3"
+                            "ContextData" = "8:"
+                            "Attributes" = "3:0"
+                            "Setting" = "3:2"
+                            "Value" = "8:作为插件安装"
+                            "DefaultValue" = "8:#1223"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "Button2Value"
+                            {
+                            "Name" = "8:Button2Value"
+                            "DisplayName" = "8:#1019"
+                            "Description" = "8:#1119"
+                            "Type" = "3:3"
+                            "ContextData" = "8:"
+                            "Attributes" = "3:0"
+                            "Setting" = "3:1"
+                            "Value" = "8:2"
+                            "DefaultValue" = "8:2"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "ButtonProperty"
+                            {
+                            "Name" = "8:ButtonProperty"
+                            "DisplayName" = "8:#1017"
+                            "Description" = "8:#1117"
                             "Type" = "3:14"
                             "ContextData" = "8:Public"
                             "Attributes" = "3:2"
                             "Setting" = "3:2"
-                            "Value" = "8:EDITA1"
-                            "DefaultValue" = "8:EDITA1"
+                            "Value" = "8:BUTTON2"
+                            "DefaultValue" = "8:BUTTON2"
                             "UsePlugInResources" = "11:TRUE"
                             }
-                            "Edit1Value"
+                            "DefaultValue"
                             {
-                            "Name" = "8:Edit1Value"
-                            "DisplayName" = "8:#1054"
-                            "Description" = "8:#1154"
+                            "Name" = "8:DefaultValue"
+                            "DisplayName" = "8:#1016"
+                            "Description" = "8:#1116"
                             "Type" = "3:3"
                             "ContextData" = "8:"
                             "Attributes" = "3:0"
                             "Setting" = "3:1"
-                            "Value" = "8:"
-                            "DefaultValue" = "8:"
+                            "Value" = "8:1"
+                            "DefaultValue" = "8:1"
                             "UsePlugInResources" = "11:TRUE"
                             }
-                            "Edit1Visible"
+                        }
+                    }
+                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_E7222630EF054D71A61E795C71324FD2"
+                    {
+                    "Sequence" = "3:300"
+                    "DisplayName" = "8:安装文件夹"
+                    "UseDynamicProperties" = "11:TRUE"
+                    "IsDependency" = "11:FALSE"
+                    "SourcePath" = "8:<VsdDialogDir>\\VsdFolderDlg.wid"
+                        "Properties"
+                        {
+                            "BannerBitmap"
                             {
-                            "Name" = "8:Edit1Visible"
-                            "DisplayName" = "8:#1042"
-                            "Description" = "8:#1142"
-                            "Type" = "3:5"
-                            "ContextData" = "8:1;True=1;False=0"
-                            "Attributes" = "3:0"
-                            "Setting" = "3:0"
-                            "Value" = "3:1"
-                            "DefaultValue" = "3:1"
-                            "UsePlugInResources" = "11:TRUE"
-                            }
-                            "Edit2Label"
-                            {
-                            "Name" = "8:Edit2Label"
-                            "DisplayName" = "8:#1047"
-                            "Description" = "8:#1147"
-                            "Type" = "3:3"
-                            "ContextData" = "8:"
-                            "Attributes" = "3:0"
+                            "Name" = "8:BannerBitmap"
+                            "DisplayName" = "8:#1001"
+                            "Description" = "8:#1101"
+                            "Type" = "3:8"
+                            "ContextData" = "8:Bitmap"
+                            "Attributes" = "3:4"
                             "Setting" = "3:1"
-                            "Value" = "8:#1247"
-                            "DefaultValue" = "8:#1247"
                             "UsePlugInResources" = "11:TRUE"
                             }
-                            "Edit2Property"
+                            "InstallAllUsersVisible"
                             {
-                            "Name" = "8:Edit2Property"
-                            "DisplayName" = "8:#1051"
-                            "Description" = "8:#1151"
-                            "Type" = "3:14"
-                            "ContextData" = "8:Public"
-                            "Attributes" = "3:2"
-                            "Setting" = "3:2"
-                            "Value" = "8:EDITA2"
-                            "DefaultValue" = "8:EDITA2"
-                            "UsePlugInResources" = "11:TRUE"
-                            }
-                            "Edit2Value"
-                            {
-                            "Name" = "8:Edit2Value"
-                            "DisplayName" = "8:#1055"
-                            "Description" = "8:#1155"
-                            "Type" = "3:3"
-                            "ContextData" = "8:"
-                            "Attributes" = "3:0"
-                            "Setting" = "3:1"
-                            "Value" = "8:"
-                            "DefaultValue" = "8:"
-                            "UsePlugInResources" = "11:TRUE"
-                            }
-                            "Edit2Visible"
-                            {
-                            "Name" = "8:Edit2Visible"
-                            "DisplayName" = "8:#1043"
-                            "Description" = "8:#1143"
-                            "Type" = "3:5"
-                            "ContextData" = "8:1;True=1;False=0"
-                            "Attributes" = "3:0"
-                            "Setting" = "3:0"
-                            "Value" = "3:1"
-                            "DefaultValue" = "3:1"
-                            "UsePlugInResources" = "11:TRUE"
-                            }
-                            "Edit3Label"
-                            {
-                            "Name" = "8:Edit3Label"
-                            "DisplayName" = "8:#1048"
-                            "Description" = "8:#1148"
-                            "Type" = "3:3"
-                            "ContextData" = "8:"
-                            "Attributes" = "3:0"
-                            "Setting" = "3:1"
-                            "Value" = "8:#1248"
-                            "DefaultValue" = "8:#1248"
-                            "UsePlugInResources" = "11:TRUE"
-                            }
-                            "Edit3Property"
-                            {
-                            "Name" = "8:Edit3Property"
-                            "DisplayName" = "8:#1052"
-                            "Description" = "8:#1152"
-                            "Type" = "3:14"
-                            "ContextData" = "8:Public"
-                            "Attributes" = "3:2"
-                            "Setting" = "3:2"
-                            "Value" = "8:EDITA3"
-                            "DefaultValue" = "8:EDITA3"
-                            "UsePlugInResources" = "11:TRUE"
-                            }
-                            "Edit3Value"
-                            {
-                            "Name" = "8:Edit3Value"
-                            "DisplayName" = "8:#1056"
-                            "Description" = "8:#1156"
-                            "Type" = "3:3"
-                            "ContextData" = "8:"
-                            "Attributes" = "3:0"
-                            "Setting" = "3:1"
-                            "Value" = "8:"
-                            "DefaultValue" = "8:"
-                            "UsePlugInResources" = "11:TRUE"
-                            }
-                            "Edit3Visible"
-                            {
-                            "Name" = "8:Edit3Visible"
-                            "DisplayName" = "8:#1044"
-                            "Description" = "8:#1144"
-                            "Type" = "3:5"
-                            "ContextData" = "8:1;True=1;False=0"
-                            "Attributes" = "3:0"
-                            "Setting" = "3:0"
-                            "Value" = "3:1"
-                            "DefaultValue" = "3:1"
-                            "UsePlugInResources" = "11:TRUE"
-                            }
-                            "Edit4Label"
-                            {
-                            "Name" = "8:Edit4Label"
-                            "DisplayName" = "8:#1049"
-                            "Description" = "8:#1149"
-                            "Type" = "3:3"
-                            "ContextData" = "8:"
-                            "Attributes" = "3:0"
-                            "Setting" = "3:1"
-                            "Value" = "8:#1249"
-                            "DefaultValue" = "8:#1249"
-                            "UsePlugInResources" = "11:TRUE"
-                            }
-                            "Edit4Property"
-                            {
-                            "Name" = "8:Edit4Property"
-                            "DisplayName" = "8:#1053"
-                            "Description" = "8:#1153"
-                            "Type" = "3:14"
-                            "ContextData" = "8:Public"
-                            "Attributes" = "3:2"
-                            "Setting" = "3:2"
-                            "Value" = "8:EDITA4"
-                            "DefaultValue" = "8:EDITA4"
-                            "UsePlugInResources" = "11:TRUE"
-                            }
-                            "Edit4Value"
-                            {
-                            "Name" = "8:Edit4Value"
-                            "DisplayName" = "8:#1057"
-                            "Description" = "8:#1157"
-                            "Type" = "3:3"
-                            "ContextData" = "8:"
-                            "Attributes" = "3:0"
-                            "Setting" = "3:1"
-                            "Value" = "8:"
-                            "DefaultValue" = "8:"
-                            "UsePlugInResources" = "11:TRUE"
-                            }
-                            "Edit4Visible"
-                            {
-                            "Name" = "8:Edit4Visible"
-                            "DisplayName" = "8:#1045"
-                            "Description" = "8:#1145"
+                            "Name" = "8:InstallAllUsersVisible"
+                            "DisplayName" = "8:#1059"
+                            "Description" = "8:#1159"
                             "Type" = "3:5"
                             "ContextData" = "8:1;True=1;False=0"
                             "Attributes" = "3:0"
@@ -1263,7 +1179,7 @@
                     }
                     "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_F3DA853C9B3C441E97ABED4CD74EF964"
                     {
-                    "Sequence" = "3:300"
+                    "Sequence" = "3:400"
                     "DisplayName" = "8:确认安装"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
