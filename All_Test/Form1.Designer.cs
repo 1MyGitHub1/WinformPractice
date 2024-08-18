@@ -33,6 +33,7 @@ namespace All_Test
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.groupBox10 = new System.Windows.Forms.GroupBox();
+            this.btn_Ticks = new System.Windows.Forms.Button();
             this.btn_TypeConverter = new System.Windows.Forms.Button();
             this.groupBox9 = new System.Windows.Forms.GroupBox();
             this.btn_modbus = new System.Windows.Forms.Button();
@@ -82,7 +83,9 @@ namespace All_Test
             this.label7 = new System.Windows.Forms.Label();
             this.btn_ServiceOpen = new System.Windows.Forms.Button();
             this.btn_ServiceClose = new System.Windows.Forms.Button();
-            this.btn_Ticks = new System.Windows.Forms.Button();
+            this.btn_progressbar = new System.Windows.Forms.Button();
+            this.groupBox13 = new System.Windows.Forms.GroupBox();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox10.SuspendLayout();
@@ -98,6 +101,7 @@ namespace All_Test
             this.tabPage2.SuspendLayout();
             this.groupBox12.SuspendLayout();
             this.groupBox11.SuspendLayout();
+            this.groupBox13.SuspendLayout();
             this.SuspendLayout();
             // 
             // button1
@@ -152,6 +156,16 @@ namespace All_Test
             this.groupBox10.Size = new System.Drawing.Size(226, 142);
             this.groupBox10.TabIndex = 8;
             this.groupBox10.TabStop = false;
+            // 
+            // btn_Ticks
+            // 
+            this.btn_Ticks.Location = new System.Drawing.Point(22, 73);
+            this.btn_Ticks.Name = "btn_Ticks";
+            this.btn_Ticks.Size = new System.Drawing.Size(75, 23);
+            this.btn_Ticks.TabIndex = 1;
+            this.btn_Ticks.Text = "计时周期";
+            this.btn_Ticks.UseVisualStyleBackColor = true;
+            this.btn_Ticks.Click += new System.EventHandler(this.btn_Ticks_Click);
             // 
             // btn_TypeConverter
             // 
@@ -575,6 +589,7 @@ namespace All_Test
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.groupBox13);
             this.tabPage2.Controls.Add(this.groupBox12);
             this.tabPage2.Controls.Add(this.groupBox11);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
@@ -655,15 +670,33 @@ namespace All_Test
             this.btn_ServiceClose.UseVisualStyleBackColor = true;
             this.btn_ServiceClose.Click += new System.EventHandler(this.btn_ServiceClose_Click);
             // 
-            // btn_Ticks
+            // btn_progressbar
             // 
-            this.btn_Ticks.Location = new System.Drawing.Point(22, 73);
-            this.btn_Ticks.Name = "btn_Ticks";
-            this.btn_Ticks.Size = new System.Drawing.Size(75, 23);
-            this.btn_Ticks.TabIndex = 1;
-            this.btn_Ticks.Text = "计时周期";
-            this.btn_Ticks.UseVisualStyleBackColor = true;
-            this.btn_Ticks.Click += new System.EventHandler(this.btn_Ticks_Click);
+            this.btn_progressbar.Location = new System.Drawing.Point(57, 20);
+            this.btn_progressbar.Name = "btn_progressbar";
+            this.btn_progressbar.Size = new System.Drawing.Size(75, 23);
+            this.btn_progressbar.TabIndex = 4;
+            this.btn_progressbar.Text = "开始";
+            this.btn_progressbar.UseVisualStyleBackColor = true;
+            this.btn_progressbar.Click += new System.EventHandler(this.btn_progressbar_Click);
+            // 
+            // groupBox13
+            // 
+            this.groupBox13.Controls.Add(this.progressBar1);
+            this.groupBox13.Controls.Add(this.btn_progressbar);
+            this.groupBox13.Location = new System.Drawing.Point(21, 182);
+            this.groupBox13.Name = "groupBox13";
+            this.groupBox13.Size = new System.Drawing.Size(210, 126);
+            this.groupBox13.TabIndex = 1;
+            this.groupBox13.TabStop = false;
+            this.groupBox13.Text = "进度条";
+            // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(19, 74);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(167, 23);
+            this.progressBar1.TabIndex = 5;
             // 
             // Form1
             // 
@@ -695,6 +728,7 @@ namespace All_Test
             this.groupBox12.ResumeLayout(false);
             this.groupBox11.ResumeLayout(false);
             this.groupBox11.PerformLayout();
+            this.groupBox13.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -755,6 +789,9 @@ namespace All_Test
         private System.Windows.Forms.GroupBox groupBox12;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button btn_Ticks;
+        private System.Windows.Forms.GroupBox groupBox13;
+        private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.Button btn_progressbar;
     }
 }
 

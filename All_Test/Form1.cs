@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 using System.Threading.Tasks.Schedulers;
 using System.Timers;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using Timer = System.Timers.Timer;
 
 namespace All_Test
@@ -1698,6 +1699,28 @@ namespace All_Test
                 }
 
             }
+        }
+
+        private void btn_progressbar_Click(object sender, EventArgs e)
+        {
+            progressBar1.Visible = true;
+            progressBar1.Maximum = 100;
+            // 设置进度条初始值
+            progressBar1.Value = 1;
+            // 设置每次增加的步长
+            progressBar1.Step = 5;
+
+            for (int i = 0; i <= 100; i++)
+            {
+                progressBar1.Value = i;
+                Thread.Sleep(100); // 模拟耗时操作
+
+                if (progressBar1.Value == progressBar1.Maximum)
+                {
+                    MessageBox.Show("操作完成！");
+                }
+            }
+            //uiProcessBar1.Value += 100 / selectedNodes.Count; //index 为索引值
         }
     }
 }
