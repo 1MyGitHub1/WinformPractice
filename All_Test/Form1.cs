@@ -1,4 +1,5 @@
-﻿using All_Test.Enum;
+﻿using All_Test.Class;
+using All_Test.Enum;
 using All_Test.Serials;
 using System;
 using System.Collections;
@@ -52,6 +53,10 @@ namespace All_Test
             MatchTest();
         }
 
+        #region 变量
+        Thread randomThread = null;
+        #endregion
+
         #region 日志
         /// <summary>
         /// 日志输出
@@ -60,13 +65,20 @@ namespace All_Test
         /// <param name="logNum"></param>
         public void LogShow(string logStr)
         {
-            string str = "";
-            this.BeginInvoke(new EventHandler(delegate
+            //string str = "";
+            if (IsHandleCreated)
             {
-                str = ChangeDateformat() + " " + DateTime.Now.ToShortTimeString() + " :" + logStr + "\n";
-                list_log.AppendText(str);
-                list_log.ScrollToCaret();
-            }));
+                this.BeginInvoke(new EventHandler(delegate
+                {
+                    list_log.AppendText(string.Format("[{0:HH:mm:ss}] {1}\r\n", DateTime.Now, logStr));
+                    Application.DoEvents();
+                    //更改颜色
+                    list_log.ForeColor = Color.FromArgb(51, 255, 102);
+                    //str = ChangeDateformat() + " " + DateTime.Now.ToShortTimeString() + " :" + logStr + "\n";
+                    //list_log.AppendText(str);
+                    list_log.ScrollToCaret();
+                }));
+            }
         }
         public static string ChangeDateformat()       //处理当前日期的格式为20150505
         {
@@ -103,6 +115,26 @@ namespace All_Test
         }
 
         #endregion
+
+        /// <summary>
+        /// 窗体关闭释放资源
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            try
+            {
+                Environment.Exit(0);
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+
+        #region 测试页1
 
         #region 配置文件
         public static string AssemblyDirectory
@@ -704,28 +736,32 @@ namespace All_Test
         {
             int count = 0;
             long longseconds;
-            Random random = new Random();
-            longseconds = DateTime.Now.Ticks / 10000;
-            while (true)
+            randomThread = new Thread(()=>
             {
-                while ((DateTime.Now.Ticks / 10000 - longseconds) / 1000 < 5)           //等待4600ms---约等于5s
+                longseconds = DateTime.Now.Ticks / 10000;
+                while (true)
                 {
-                    count++;
-                    //Console.WriteLine("Thread.Sleep(100)");
-                    Thread.Sleep(100);
-                }
-                string num = random.Next(1001, 1089).ToString();
-                Console.WriteLine(count);
-                Console.WriteLine(num);
 
-                LogShow(count.ToString());
-                LogShow(num.ToString());
+                    Random random = new Random();
+                    //while ((DateTime.Now.Ticks / 10000 - longseconds) / 1000 < 5)           //等待4600ms---约等于5s
+                    //{
+                    //    count++;
+                    //    Thread.Sleep(100);
+                    //}
+                    string num = random.Next(1001, 1089).ToString();
+                    //Console.WriteLine(count);
+                    Console.WriteLine(num);
 
-                if (int.Parse(num) > 1005)
-                {
-                    break;
+                    //LogShow(count.ToString());
+                    LogShow(num);
+                    Thread.Sleep(1000);
+                    //if (int.Parse(num) > 1005)
+                    //{
+                    //    break;
+                    //}
                 }
-            }
+            });
+            randomThread.Start();
         }
         #endregion
 
@@ -935,7 +971,7 @@ namespace All_Test
         {
             public string PersonType = "地球人";//字段
             public string Name { get; set; }//属性+方法：get_Name 等
-            public int Asge { get; set; }//属性
+            public int Age { get; set; }//属性
             public string Sex { get; set; }//属性
             public abstract void Speak();//方法
         }
@@ -1287,6 +1323,180 @@ namespace All_Test
         }
         #endregion
 
+        #region 文件夹
+        /// <summary>
+        /// 复制文件夹及文件
+        /// </summary>
+        /// <param name="sourceFolder">原文件路径</param>
+        /// <param name="destFolder">目标文件路径</param>
+        /// <returns></returns>
+        public int CopyFolder2(string sourceFolder, string destFolder)
+        {
+            try
+            {
+                string folderName = System.IO.Path.GetFileName(sourceFolder);
+                string destfolderdir = System.IO.Path.Combine(destFolder, folderName);
+                string[] filenames = System.IO.Directory.GetFileSystemEntries(sourceFolder);
+                foreach (string file in filenames)// 遍历所有的文件和目录
+                {
+                    if (System.IO.Directory.Exists(file))
+                    {
+                        string currentdir = System.IO.Path.Combine(destfolderdir, System.IO.Path.GetFileName(file));
+                        if (!System.IO.Directory.Exists(currentdir))
+                        {
+                            System.IO.Directory.CreateDirectory(currentdir);
+                        }
+                        CopyFolder2(file, destfolderdir);
+                    }
+                    else
+                    {
+                        string srcfileName = System.IO.Path.Combine(destfolderdir, System.IO.Path.GetFileName(file));
+                        if (!System.IO.Directory.Exists(destfolderdir))
+                        {
+                            System.IO.Directory.CreateDirectory(destfolderdir);
+                        }
+                        System.IO.File.Copy(file, srcfileName);
+                    }
+                }
+
+                return 1;
+            }
+            catch (Exception e)
+            {
+
+                MessageBox.Show(e.Message);
+                return 0;
+            }
+
+        }
+        #endregion
+
+        #region 正则表达式
+        public void MatchTest()
+        {
+            string we = DateTime.Now.ToLongDateString().ToString();
+            //string pattern = @"\^(?< !\\QSS\\E).*$\";
+            //string str = "S S  456.5g";
+            //// 找出不匹配项
+            //List<string> mismatches = new List<string>();
+            //foreach (var s in str)
+            //{
+            //    // 检查是否匹配
+            //    Match match1 = Regex.Match(str, pattern);
+            //    if (!match1.Success)
+            //    {
+            //        // 不匹配的项添加到列表
+            //        mismatches.Add(str);
+            //    }
+            //}
+
+
+            string str = "S S  456.5g";
+            str = Regex.Replace(str, @"\s", "");
+            for (int i = 0; i < str.Length; i++)
+            {
+                if (str[i] == 'S' || str[i] == 'D' || str[i] == 'g')
+                {
+                   str = str.Replace(str[i], ' ');                   
+                }
+            }
+            Console.WriteLine(str);
+
+
+            #region MyRegion
+            //string Text = "http://192.168.0.1:2008";
+            //string pattern = @"/b(/S+)://(/S+)(?::(/S+))/b";
+            //MatchCollection matches = Regex.Matches(Text, pattern, RegexOptions.ExplicitCapture | RegexOptions.RightToLeft);
+
+            //Console.WriteLine("从左向右匹配字符串：");
+
+            //foreach (Match NextMatch in matches)
+            //{
+            //    Console.Write("匹配的位置：{0} ", NextMatch.Index);
+            //    Console.Write("匹配的内容：{0} ", NextMatch.Value);
+            //    Console.Write("/n");
+
+            //    for (int i = 0; i < NextMatch.Groups.Count; i++)
+            //    {
+            //        Console.Write("匹配的组 {0}：{1,4} ", i + 1, NextMatch.Groups[i].Value);
+            //        Console.Write("/n");
+            //    }
+            //}
+            #endregion
+
+
+        }
+        #endregion
+
+        #region DateTime.Time. Ticks
+
+        private void btn_Ticks_Click(object sender, EventArgs e)
+        {
+            //long str = DateTime.Now.Ticks/10000000;
+            DateTime str = DateTime.Now;
+            LogShow(str.ToString());
+            //Console.WriteLine(str);
+            Thread.Sleep(5000);
+            DateTime str1 = DateTime.Now;
+            LogShow(str1.ToString());
+            TimeSpan timeSpan = str1 - str;
+            LogShow(timeSpan.ToString(@"hh\:mm\:ss"));
+        }
+
+        #endregion
+
+        #region 等待时间
+        /// <summary>
+        /// 等待时间
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btn_WaitTime_Click(object sender, EventArgs e)
+        {
+            int i = 0;
+            long longsecondss = DateTime.Now.Ticks / 10000;
+            while ((DateTime.Now.Ticks / 10000 - longsecondss) / 1000 < 5)
+            {
+                i++;
+                LogShow(i.ToString());
+                Thread.Sleep(1000);
+            }
+        }
+
+        #endregion
+
+        #region list.ForEach
+        public class PersonTest
+        {
+            private int id;
+            public int Id { get; set; }
+            private string personName;
+            public string PersonName { get; set; }
+
+        }
+        private void btn_listForEach_Click(object sender, EventArgs e)
+        {
+            List<PersonTest> list = new List<PersonTest>(){
+             new PersonTest(){ Id=1,PersonName="AAA"},
+             new PersonTest(){ Id=2,PersonName="SSS"},
+             new PersonTest(){ Id=3,PersonName="BBB"},
+             new PersonTest(){ Id=4,PersonName="RRR"},
+             };
+
+            list.ForEach(t => t.PersonName = "OOO");
+            list.ForEach(Print); 
+        }
+        private void Print(PersonTest personTest)
+        {
+            LogShow(personTest.Id + ":" + personTest.PersonName);
+        }
+        #endregion
+
+
+        #endregion
+
+        #region 测试页2
+
         #region 开启/停止Windows服务
         /// <summary>
         /// 关闭服务
@@ -1359,6 +1569,114 @@ namespace All_Test
 
         #endregion
 
+        #region 三角函数
+        private void btn_sin_Click(object sender, EventArgs e)
+        {
+            double angle = double.Parse(tb_angle.Text);
+            double TrayWOffset = Math.Sin(angle / 2 * Math.PI / 180) * 120.8;
+            LogShow("补偿的值： Math.Sin("+ angle + " / 2 * Math.PI / 180 )" +TrayWOffset );
+            double itemXToCenter = 107 + TrayWOffset;
+            double length = Math.Sqrt(Math.Pow(120.8, 2) - Math.Pow(itemXToCenter, 2)) - 49;
+            LogShow("补偿后的值： " + length);
+            double length1 = Math.Sqrt(Math.Pow(120.8, 2) - Math.Pow(107, 2)) - 49;
+            LogShow("没补偿的值： Math.Pow(107, 2)" + length1);
+
+            double TrayWOffset1 = Math.Sin(0 / 2 * Math.PI / 180) * 120.5;
+            LogShow("测试0：" + TrayWOffset1);
+
+            double value = 109.15 / ( Math.Tan(64.63 * Math.PI / 180));
+            LogShow("Tan值：" + value);
+        }
+
+        #endregion
+
+        #region MyRegion
+        public static void ReportSave()
+        {
+            //System.Windows.Current.Dispatcher.Invoke((Action)(() =>
+            //{
+            //    DateTime date = DateTime.Now;
+            //    if (!Directory.Exists(SettingData.Instance.ReportPath))
+            //    {
+            //        Directory.CreateDirectory(SettingData.Instance.ReportPath);
+            //    }
+            //    string filename = SettingData.Instance.ReportPath + "\\" + date.ToLongDateString();
+            //    if (!Directory.Exists(filename))
+            //    {
+            //        Directory.CreateDirectory(filename);
+            //        ProcessVariable.Instance.ReportName.Add(date.ToLongDateString());
+            //    }
+            //    string path = filename + "\\" + date.ToString("HH时mm分") + "By" + GlobalVariable.userInfor.UserName + ".ini";
+            //    System.IO.FileStream fs = new System.IO.FileStream(path, System.IO.FileMode.Create);
+            //    System.IO.StreamWriter sw = new System.IO.StreamWriter(fs);
+            //    try
+            //    {
+            //        sw.WriteLine("用户名---" + GlobalVariable.userInfor.UserName);
+            //        sw.WriteLine("是否为管理员--" + GlobalVariable.userInfor.Level_6);
+            //        sw.WriteLine(MethodData.Instance.MethodName);
+            //        sw.WriteLine("步骤" + "\t\t" + "样品/溶剂" + "\t\t" + "体积mL  " + "\t\t" + "流速mL/min" + "\t\t" + "收集位置" + "\t");
+            //        for (int i = 0; i < MethodData.Instance.methodInfos.Count; i++)
+            //        {
+            //            if (MethodData.Instance.methodInfos[i].StepName == StepName.清洗样品瓶 || MethodData.Instance.methodInfos[i].StepName == StepName.清洗进样针)
+            //                sw.WriteLine(MethodData.Instance.methodInfos[i].StepName + "\t" +
+            //                    MethodData.Instance.methodInfos[i].SolventName + "\t\t\t" +
+            //                    MethodData.Instance.methodInfos[i].Volume + "\t\t\t" +
+            //                    MethodData.Instance.methodInfos[i].FlowRate + "\t\t\t" +
+            //                    MethodData.Instance.methodInfos[i].CollectionPosition + "\t\t");
+            //            else if (MethodData.Instance.methodInfos[i].StepName == StepName.上样)
+            //            {
+            //                sw.WriteLine(MethodData.Instance.methodInfos[i].StepName + "\t\t" +
+            //                    MethodData.Instance.methodInfos[i].SolventName + "\t\t\t" +
+            //                    "\t\t\t" +
+            //                    MethodData.Instance.methodInfos[i].FlowRate + "\t\t\t" +
+            //                    MethodData.Instance.methodInfos[i].CollectionPosition + "\t\t");
+            //                sw.WriteLine("\t\t" + "通道" + "\t\t\t" + "体积" + "\t\t\t" + "上样完成时间");
+            //                foreach (var item1 in GlobalVariable.LoadSampleVolumnReport)
+            //                {
+            //                    if (GlobalVariable.LoadSampleEndTimeReport.Count != 0)
+            //                    {
+            //                        foreach (var item2 in GlobalVariable.LoadSampleEndTimeReport)
+            //                        {
+            //                            if (item1.Key == item2.Key)
+            //                            {
+            //                                sw.WriteLine("\t\t" + item1.Key + "\t\t\t" + item1.Value + "\t\t\t" + item2.Value);
+            //                            }
+            //                        }
+            //                    }
+            //                    else
+            //                    {
+            //                        sw.WriteLine("\t\t" + item1.Key + "\t\t\t" + item1.Value);
+            //                    }
+            //                }
+            //            }
+            //            else
+            //                sw.WriteLine(MethodData.Instance.methodInfos[i].StepName + "\t\t" +
+            //                    MethodData.Instance.methodInfos[i].SolventName + "\t\t\t" +
+            //                    MethodData.Instance.methodInfos[i].Volume + "\t\t\t" +
+            //                    MethodData.Instance.methodInfos[i].FlowRate + "\t\t\t" +
+            //                    MethodData.Instance.methodInfos[i].CollectionPosition + "\t\t");
+            //        }
+            //        foreach (string str in ProcessVariable.Instance.EngineerLog)
+            //            sw.WriteLine(str);
+            //    }
+            //    catch
+            //    {
+
+            //    }
+            //    finally
+            //    {
+            //        sw.Close();
+            //        fs.Close();
+            //    }
+            //}));
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Task测试
+
         #region Task.Run资源释放
         private void button2_Click(object sender, EventArgs e)
         {
@@ -1404,323 +1722,85 @@ namespace All_Test
         }
         #endregion
 
-        #region DateTime.Time. Ticks
+        #region Task测试
 
-        private void btn_Ticks_Click(object sender, EventArgs e)
+        private void btn_TaskWaitAll_Click(object sender, EventArgs e)
         {
-            //long str = DateTime.Now.Ticks/10000000;
-            DateTime str = DateTime.Now;
-            Console.WriteLine(str);
-            Thread.Sleep(5000);
-            DateTime str1 = DateTime.Now;
-            Console.WriteLine(str1);
-            TimeSpan timeSpan = str1 - str;
-            Console.WriteLine(timeSpan.ToString(@"hh\:mm\:ss"));
+            Thread_HelpClass helpClass = new Thread_HelpClass();
+            Task thread1 = Task.Factory.StartNew(() => helpClass.fun1());
+            Task thread2 = Task.Factory.StartNew(() => helpClass.fun2());
+            Task.WaitAll(thread1, thread2);
+            LogShow(GlobalInfo.Instance.fun1num.ToString());
+            LogShow(GlobalInfo.Instance.fun2num.ToString());
+            LogShow("The End");
+
         }
 
-        #endregion
-
-        #region 文件夹
-        /// <summary>
-        /// 复制文件夹及文件
-        /// </summary>
-        /// <param name="sourceFolder">原文件路径</param>
-        /// <param name="destFolder">目标文件路径</param>
-        /// <returns></returns>
-        public int CopyFolder2(string sourceFolder, string destFolder)
+        private void btn_ThreadJoin_Click(object sender, EventArgs e)
         {
-            try
-            {
-                string folderName = System.IO.Path.GetFileName(sourceFolder);
-                string destfolderdir = System.IO.Path.Combine(destFolder, folderName);
-                string[] filenames = System.IO.Directory.GetFileSystemEntries(sourceFolder);
-                foreach (string file in filenames)// 遍历所有的文件和目录
-                {
-                    if (System.IO.Directory.Exists(file))
-                    {
-                        string currentdir = System.IO.Path.Combine(destfolderdir, System.IO.Path.GetFileName(file));
-                        if (!System.IO.Directory.Exists(currentdir))
-                        {
-                            System.IO.Directory.CreateDirectory(currentdir);
-                        }
-                        CopyFolder2(file, destfolderdir);
-                    }
-                    else
-                    {
-                        string srcfileName = System.IO.Path.Combine(destfolderdir, System.IO.Path.GetFileName(file));
-                        if (!System.IO.Directory.Exists(destfolderdir))
-                        {
-                            System.IO.Directory.CreateDirectory(destfolderdir);
-                        }
-                        System.IO.File.Copy(file, srcfileName);
-                    }
-                }
-
-                return 1;
-            }
-            catch (Exception e)
-            {
-
-                MessageBox.Show(e.Message);
-                return 0;
-            }
-
+            Thread_HelpClass helpClass = new Thread_HelpClass();
+            LogShow(DateTime.Now.ToString());
+            Thread thread1 = new Thread(new ThreadStart(helpClass.fun1));
+            Thread thread2 = new Thread(new ThreadStart(helpClass.fun2));
+            thread1.Start();
+            thread1.Join();
+            LogShow(DateTime.Now.ToString());
+            thread2.Start();
+            thread2.Join();
+            LogShow(GlobalInfo.Instance.fun2num.ToString());
+            LogShow(DateTime.Now.ToString());
         }
         #endregion
 
-        #region 正则表达式
-        public void MatchTest()
+        #region 确保一个线程结束，开始下一个线程
+        private void btn_Task_Click(object sender, EventArgs e)
         {
-            //string pattern = @"\^(?< !\\QSS\\E).*$\";
-            //string str = "S S  456.5g";
-            //// 找出不匹配项
-            //List<string> mismatches = new List<string>();
-            //foreach (var s in str)
+            Task<int> ta = new Task<int>(() =>
+            {
+                return 422;
+            });
+            //同步运行，相当于运行在主线程中
+            ta.RunSynchronously();
+            LogShow(ta.Result.ToString());
+
+            Task<int> task = Task.Run<int>(() => {
+                return 42;
+            });
+            //task.GetAwaiter().OnCompleted(() =>
             //{
-            //    // 检查是否匹配
-            //    Match match1 = Regex.Match(str, pattern);
-            //    if (!match1.Success)
-            //    {
-            //        // 不匹配的项添加到列表
-            //        mismatches.Add(str);
-            //    }
-            //}
+            //    //这个一定会执行
+            //    Console.WriteLine(task.Result);
+            //});
+            //Console.WriteLine("主线程结束！");
 
+            Task<int> taskcontinue = task.ContinueWith<int>((tsk) => {
+                //传入的是task任务对象
+                LogShow(tsk.Result.ToString());
+                return 24 + tsk.Result;
+            });
 
-            string str = "S S  456.5g";
-            str = Regex.Replace(str, @"\s", "");
-            for (int i = 0; i < str.Length; i++)
-            {
-                if (str[i] == 'S' || str[i] == 'D' || str[i] == 'g')
-                {
-                   str = str.Replace(str[i], ' ');                   
-                }
-            }
-            Console.WriteLine(str);
-
-
-            #region MyRegion
-            //string Text = "http://192.168.0.1:2008";
-            //string pattern = @"/b(/S+)://(/S+)(?::(/S+))/b";
-            //MatchCollection matches = Regex.Matches(Text, pattern, RegexOptions.ExplicitCapture | RegexOptions.RightToLeft);
-
-            //Console.WriteLine("从左向右匹配字符串：");
-
-            //foreach (Match NextMatch in matches)
+            LogShow(taskcontinue.Result.ToString());
+            //taskcontinue.GetAwaiter().OnCompleted(() =>
             //{
-            //    Console.Write("匹配的位置：{0} ", NextMatch.Index);
-            //    Console.Write("匹配的内容：{0} ", NextMatch.Value);
-            //    Console.Write("/n");
+            //    //这个一定会执行
+            //    Console.WriteLine(taskcontinue.Result);
+            //});
 
-            //    for (int i = 0; i < NextMatch.Groups.Count; i++)
-            //    {
-            //        Console.Write("匹配的组 {0}：{1,4} ", i + 1, NextMatch.Groups[i].Value);
-            //        Console.Write("/n");
-            //    }
-            //}
-            #endregion
-
-
+            Task<int> tasktask = Task.Run<int>(() =>
+            {
+                return 4200;
+            });
+            //tasktask.Status!=TaskStatus.
+            while (!tasktask.IsCompleted)
+            {
+                Thread.Sleep(TimeSpan.FromSeconds(0.5));
+            }
+            LogShow(tasktask.Result.ToString());
         }
         #endregion
 
-        public class HelpClass
-        {
-            public static List<string> IncludeFileList = new List<string>
-        {
-            "C:\\",
-            "C:\\Labtech",
-            "C:\\Program Files",
-            "C:\\Program Files (x86)",
-            "C:\\Program Files\\Labtech",
-            "C:\\Program Files (x86)\\Labtech",
-            "C:\\HiMass",
-            "D:\\",
-            "D:\\Labtech",
-            "D:\\Program Files",
-            "D:\\Program Files (x86)",
-            "D:\\Program Files\\Labtech",
-            "D:\\Program Files (x86)\\Labtech",
-            "D:\\HiMass",
-        };
+        #endregion
 
-            public static string FindInstallDir(string dirName, out long himassDirSize)
-            {
-                for (int i = 0; i < IncludeFileList.Count; i++)
-                {
-                    string dirPath = FindDir(dirName, IncludeFileList[i]);
-                    if (dirPath == null)
-                        continue;
-                    himassDirSize = 0;
-                    GetDirSizeByPath(dirPath, ref himassDirSize);
-                    if (himassDirSize < 10000000) //10M
-                    {
-                        continue;
-                    }
-                    bool isExistHiMassExe = System.IO.File.Exists(dirPath + "\\HiMass.exe");
-                    bool isExistParaDir = Directory.Exists(dirPath + "\\Parameter");
-                    if (isExistHiMassExe && isExistParaDir)
-                    {
-                        //InstallerClass.Logger("Install dir size =" + himassDirSize);
-                        //MainLogHelper.Instance.Info("Install dir size =" + himassDirSize);
-                        return dirPath;
-                    }
 
-                }
-                himassDirSize = 0;
-                return null;
-            }
-            /// <summary>
-            /// 从rootDirPath中，找到名称为dirName的子文件夹，只搜寻两层
-            /// </summary>
-            /// <param name="dirName">要寻找的文件夹名称</param>
-            /// <param name="rootDirPath">被搜寻的文件夹路径</param>
-            /// <returns>目标文件夹的完整路径</returns>
-            public static string FindDir(string dirName, string rootDirPath)
-            {
-                try
-                {
-
-                    List<String> list = new List<string>();
-
-                    if (rootDirPath == null || rootDirPath == "" || dirName == "" || dirName == null)
-                    {
-                        //InstallerClass.Logger("Find install directory failed. Parameter is null or empty");
-                        //MainLogHelper.Instance.Error("Find install directory failed. Parameter is null or empty");
-                        return null;
-                    }
-
-                    //遍历文件夹
-                    DirectoryInfo tmpFolder = new DirectoryInfo(rootDirPath);
-
-                    //遍历子文件夹
-                    DirectoryInfo[] dirInfo = GetDirectories(tmpFolder);
-                    if (dirInfo == null)
-                    {
-                        //InstallerClass.Logger("Find install directory failed. Parameter is out of range.");
-                        //MainLogHelper.Instance.Error("Find install directory failed. Parameter is out of range.");
-                        return null;
-                    }
-
-                    foreach (DirectoryInfo NextFolder in dirInfo)
-                    {
-                        if (NextFolder.Name == dirName)
-                        {
-                            return NextFolder.FullName;
-                        }
-                        else
-                        {
-                            //遍历子文件夹
-                            DirectoryInfo[] thirdDirInfo = GetDirectories(NextFolder);
-                            if (thirdDirInfo == null)
-                            {
-                                continue;
-                            }
-                            foreach (DirectoryInfo ThirdFolder in thirdDirInfo)
-                            {
-                                if (ThirdFolder.Name == dirName)
-                                {
-                                    return ThirdFolder.FullName;
-                                }
-                            }
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    //InstallerClass.Logger(ex.ToString());
-                    //MainLogHelper.Instance.Error(ex);
-                }
-                //InstallerClass.Logger("Find install directory failed. Parameter is out of range.");
-                //MainLogHelper.Instance.Error("Find install directory failed. Parameter is out of range.");
-                return null;
-            }
-
-            public static DirectoryInfo[] GetDirectories(DirectoryInfo NextFolder)
-            {
-                try
-                {
-                    if (!IncludeFileList.Contains(NextFolder.FullName))
-                    {
-                        //InstallerClass.Logger(NextFolder.FullName + " is refused to access.");
-                        //MainLogHelper.Instance.Error(NextFolder.FullName + " is refused to access.");
-                        return null;
-                    }
-                    return NextFolder.GetDirectories();
-                }
-                catch (Exception ex)
-                {
-                    //InstallerClass.Logger(ex.ToString());
-
-                    //MainLogHelper.Instance.Error(ex);
-                }
-                return null;
-
-            }
-
-            /// <summary>
-            /// 获取某一文件夹的大小,单位字节数
-            /// </summary>
-            /// <param name="dir">文件夹目录</param>
-            /// <param name="dirSize">文件夹大小</param>
-            public static void GetDirSizeByPath(string dir, ref long dirSize)
-            {
-                try
-                {
-
-                    DirectoryInfo dirInfo = new DirectoryInfo(dir);
-                    if (dirInfo == null)
-                    {
-                        dirSize = 0;
-                    }
-
-                    DirectoryInfo[] dirs = dirInfo.GetDirectories();
-                    FileInfo[] files = dirInfo.GetFiles();
-
-                    if (dirs != null)
-                    {
-                        foreach (var item in dirs)
-                        {
-                            GetDirSizeByPath(item.FullName, ref dirSize);
-                        }
-                    }
-
-                    if (files != null)
-                    {
-                        foreach (var item in files)
-                        {
-                            dirSize += item.Length;
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Get directory size failed. " + ex.Message);
-                }
-
-            }
-        }
-
-        private void btn_progressbar_Click(object sender, EventArgs e)
-        {
-            progressBar1.Visible = true;
-            progressBar1.Maximum = 100;
-            // 设置进度条初始值
-            progressBar1.Value = 1;
-            // 设置每次增加的步长
-            progressBar1.Step = 5;
-
-            for (int i = 0; i <= 100; i++)
-            {
-                progressBar1.Value = i;
-                Thread.Sleep(100); // 模拟耗时操作
-
-                if (progressBar1.Value == progressBar1.Maximum)
-                {
-                    MessageBox.Show("操作完成！");
-                }
-            }
-            //uiProcessBar1.Value += 100 / selectedNodes.Count; //index 为索引值
-        }
     }
 }

@@ -38,32 +38,37 @@ namespace MyCustomLib
                 Logger($"安装路径:{path}");
 
                 //Logger($"OnAfterInstall开始");
-                long installDirSize = 0;
+                //long installDirSize = 0;
                 string himassDir = "D:\\labtech\\APP1";
+                //string himassDir = "D:\\Program Files\\HiMass";
                 //string himassDir = HelpClass.FindInstallDir("HiMass", out installDirSize);
                 //判断否已经安装Mass,(没有安装:就不存在安装插件)
                 if (himassDir != null || himassDir != " ")   //已安装
                 {
                     if (installType == "2")//如果选择了以插件安装
                     {
-                        if (himassDir != null || himassDir != " ")
+                        path = path + "\\SamplerPlugins";           //要复制的资源路径
+                        if (Directory.Exists(himassDir + "\\SamplerPlugins"))
                         {
-                            if (Directory.Exists(himassDir + "\\SamplerPlugins"))
-                            {
-                                System.IO.DirectoryInfo folder = new System.IO.DirectoryInfo(himassDir + "\\SamplerPlugins");
-                                folder.MoveTo(himassDir + "\\SamplerPlugins备份");
-                                Logger($"备份完成");
+                            System.IO.DirectoryInfo folder = new System.IO.DirectoryInfo(himassDir + "\\SamplerPlugins");
+                            string fileName = "SamplerPlugins备份" + DateTime.Now.ToLongDateString().ToString();
+                            folder.MoveTo(himassDir + "\\" + fileName);
+                            Logger($"备份完成");
 
-
-                                //得到原文件根目录下的所有文件夹
-                                HelpClass.CopyFolder2(path, himassDir);
-                                Logger($"复制完成");
-                            }
-                            else
-                            {
-                                //得到原文件根目录下的所有文件夹
-                                HelpClass.CopyFolder2(path, himassDir);
-                            }
+                            //创建这个文件夹
+                            himassDir = himassDir + "\\SamplerPlugins";         //要复制去的目的路径
+                            Directory.CreateDirectory(himassDir);
+                            //得到原文件根目录下的所有文件夹
+                            HelpClass.CopyFolder2(path, himassDir);
+                            Logger($"复制完成");
+                        }
+                        else
+                        {
+                            //创建这个文件夹
+                            himassDir = himassDir + "\\SamplerPlugins";
+                            Directory.CreateDirectory(himassDir);
+                            //复制得到原文件根目录下的所有文件夹
+                            HelpClass.CopyFolder2(path, himassDir);
                         }
                     }
                 }
@@ -99,7 +104,7 @@ namespace MyCustomLib
         {
             try
             {
-                //string fileName = @"C:\Test\log.txt";
+                //string fileName = @"D:\CSharpTest\log.txt";
                 string fileName = @"C:\\labte\\Project\\Test\\Test_CSharp\\Function_Test";
                 if (!Directory.Exists(Path.GetDirectoryName(fileName)))
                 {

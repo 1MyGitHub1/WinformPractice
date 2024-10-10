@@ -42,10 +42,13 @@ namespace All_Test
         }
         private SamplerSerials _totalabSerials = new SamplerSerials();
 
-
+        #region 变量
+        public int fun1num;
+        public int fun2num;
+        #endregion
 
         #region 四个字节十六进制数和单精度浮点数之间的相互转化
-        
+
         public static float ToFloat(byte[] data)
         {
             float a = 0;
