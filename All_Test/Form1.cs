@@ -19,6 +19,8 @@ using System.Threading.Tasks;
 using System.Threading.Tasks.Schedulers;
 using System.Timers;
 using System.Windows.Forms;
+using ZXing;
+using static All_Test.Form1;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using Timer = System.Timers.Timer;
 
@@ -29,6 +31,8 @@ namespace All_Test
         public Form1()
         {
             InitializeComponent();
+            textBox_name_Leave(null,null);
+            textBox_age_Leave(null, null);
             //GlobalInfo.Instance.Totalab_LSerials.MsgCome += Sampler_MsgCome;
             //long installDirSize = 0;
             //string himassDir = HelpClass.FindInstallDir("HiMass", out installDirSize);
@@ -123,9 +127,19 @@ namespace All_Test
         /// <param name="e"></param>
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
+            //说明：FormClosing事件或FormClosed事件二选一，这两个的区别在于 FormClosed 在关闭后发生，窗体的关闭动作不可取消； 
+            //FormClosing 在关闭前发生，可取消，只要在里面使用 e.Cancel = true; 就可以让窗口不能关闭。  
+            //进阶技巧：在退出程序前弹出确认退出程序的对话框 //主窗体的FormClosing事件代码 
             try
             {
-                Environment.Exit(0);
+                if (MessageBox.Show("真的要退出程序吗？", "退出程序", MessageBoxButtons.OKCancel) == DialogResult.Cancel)
+                {
+                    e.Cancel = true;
+                }
+                else
+                {
+                    Environment.Exit(0);
+                }
             }
             catch (Exception)
             {
@@ -170,6 +184,44 @@ namespace All_Test
             }
 
         }
+        private bool istextHas = false;             //记录文本框是否有文本
+        private void textBox_name_Leave(object sender, EventArgs e)
+        {
+            if (textBox_name.Text=="")
+            {
+                textBox_name.Text = "电影名";          //显示提示信息
+                textBox_name.ForeColor = Color.LightGray;
+            }
+            else
+            {
+                istextHas=true;                 //否则为文本框有文本
+            }
+        }
+        private void textBox_name_MouseDown(object sender, MouseEventArgs e)
+        {
+            this.textBox_name.Text = ""; 
+            textBox_name.ForeColor = Color.Black;
+            
+        }
+
+        private void textBox_age_Leave(object sender, EventArgs e)
+        {
+            if (textBox_age.Text == "")
+            {
+                textBox_age.Text = "剧集";          //显示提示信息
+                textBox_age.ForeColor = Color.LightGray;
+            }
+            else
+            {
+                istextHas = true;                 //否则为文本框有文本
+            }
+        }
+
+        private void textBox_age_MouseDown(object sender, MouseEventArgs e)
+        {
+            this.textBox_age.Text = ""; 
+            textBox_age.ForeColor = Color.Black;
+        }
         //保存
         private void btn_file_Click(object sender, EventArgs e)
         {
@@ -183,11 +235,10 @@ namespace All_Test
 
             ////封装对象信息
             StudentInfo sto = new StudentInfo();
-            if (textBox_name.Text != "" && textBox_age.Text != "")
+            if (textBox_name.Text != ""&& textBox_name.Text != "电影名" && textBox_age.Text != "" && textBox_age.Text != "剧集")
             {
                 sto.name = textBox_name.Text;
                 sto.age = int.Parse(textBox_age.Text);
-
             }
             else
             {
@@ -317,6 +368,28 @@ namespace All_Test
             LogShow("nVolume1:" + nVolume1 + "\n nVolume2:" + nVolume2 + "\n nVolume3:" + nVolume3 + "\n nVolume4:" + nVolume4);
         }
 
+        #endregion
+
+        #region string转float
+        /// <summary>
+        /// string转float
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btn_StrToFloat_Click(object sender, EventArgs e)
+        {
+            string str = tb_str.Text;
+            float floatValue = Convert.ToSingle(str);
+            float floatValue2;
+            if (!float.TryParse(str,out floatValue2))
+            {
+                LogShow("无法转换！");
+            }
+            else
+            {
+                LogShow("转换成功！");
+            }
+        }
         #endregion
 
         #region 事件调用实时读取--参考
@@ -734,7 +807,7 @@ namespace All_Test
 
         private void btn_Start_Click(object sender, EventArgs e)
         {
-            int count = 0;
+            //int count = 0;
             long longseconds;
             randomThread = new Thread(()=>
             {
@@ -1468,9 +1541,9 @@ namespace All_Test
         #region list.ForEach
         public class PersonTest
         {
-            private int id;
+            //private int id;
             public int Id { get; set; }
-            private string personName;
+            //private string personName;
             public string PersonName { get; set; }
 
         }
@@ -1482,13 +1555,75 @@ namespace All_Test
              new PersonTest(){ Id=3,PersonName="BBB"},
              new PersonTest(){ Id=4,PersonName="RRR"},
              };
-
+            list.ForEach(item =>
+            {
+                if (item.PersonName.Contains("S")|| item.PersonName.Contains("R"))
+                {
+                    item.PersonName = "111";
+                }
+                LogShow(item.Id + ":" + item.PersonName);
+            });
             list.ForEach(t => t.PersonName = "OOO");
             list.ForEach(Print); 
         }
         private void Print(PersonTest personTest)
         {
             LogShow(personTest.Id + ":" + personTest.PersonName);
+        }
+        #endregion
+
+        #region 委托
+        //Action委托(都没有返回值)：
+        //Action：无参，无返回值；
+        //Action<T>：有参数T(1~16 个)，无返回值；
+
+        //Func委托(都有返回值)：
+        //Func<T>:无参，返回值为T;
+        //Func<T1, T2, T>:有参数T1,T2(1~16个)，返回值为T
+
+        /// <summary>
+        /// Action委托
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btn_action_Click(object sender, EventArgs e)
+        {
+            Action action01;                                    //定义Action委托，无参数，无返回值
+            action01 = () => LogShow("Action无参数的委托");       //使用Lambda表达式添加方法语句块
+            action01();
+
+            Action<int> action02;
+            action02 = (int a) => LogShow("Action有1个参数的委托"+ a);
+            //action02 = (int a) => Console.WriteLine("Action有1个参数的委托{0}", a);
+            action02(666);
+        }
+        /// <summary>
+        /// Func委托
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btn_func_Click(object sender, EventArgs e)
+        {
+            //定义Func委托，没有参数，返回值是int
+            Func<int> func01;
+            func01 = () => 
+            { 
+                LogShow("一个无参数的Func委托，返回值是：");
+                return 123;
+            };
+            var temp = func01();
+            LogShow(temp.ToString());
+
+
+            //定义Func委托，有两个string参数，返回值是int，注意返回值是在<>的最后一个
+            Func<string, string, int> func02;
+            func02 = (string str1, string str2) =>
+            {
+                LogShow($"{str1}一个无参数的Func委托{str2}，返回值是： ");
+                return 567;
+            };
+            var temp02 = func02("我是","类型");
+            LogShow(temp02.ToString());
         }
         #endregion
 
@@ -1673,6 +1808,53 @@ namespace All_Test
 
         #endregion
 
+        #region 二维码生成
+        private void btn_QRcode_Click(object sender, EventArgs e)
+        {
+            string info = tb_QRcode.Text.ToString();
+
+            Bitmap bitmap = null;           //结果图片
+            int height = 153;
+            int width = 153;
+            try
+            {
+                BarcodeWriter barcodeWriter = new BarcodeWriter();
+                barcodeWriter.Format = BarcodeFormat.QR_CODE;           //二维码有很多标准，这里可以设定
+                barcodeWriter.Options.Hints.Add(EncodeHintType.CHARACTER_SET, "UTF-8");
+                barcodeWriter.Options.Hints.Add(EncodeHintType.ERROR_CORRECTION, ZXing.QrCode.Internal.ErrorCorrectionLevel.H);
+                barcodeWriter.Options.Height = height;
+                barcodeWriter.Options.Width = width;
+                barcodeWriter.Options.Margin = 0;
+                ZXing.Common.BitMatrix bitMatrix = barcodeWriter.Encode(info);
+                bitmap = barcodeWriter.Write(bitMatrix);
+
+                //显示
+                this.pictureBox1.Image = bitmap;
+
+                // 保存为图片文件
+                //string filePath = System.AppDomain.CurrentDomain.BaseDirectory + "..\\QR_CODE_" + info.Substring(0, info.Length) + ".jpg";
+                string filePath = System.AppDomain.CurrentDomain.BaseDirectory + "QR_CODE";
+                if (Directory.Exists(filePath)) 
+                {
+                    filePath = filePath + "\\" + info.Substring(0, info.Length) + ".jpg";
+                    bitmap.Save(filePath, System.Drawing.Imaging.ImageFormat.Jpeg);
+                }
+                else 
+                { 
+                    Directory.CreateDirectory(filePath);
+                    filePath = System.AppDomain.CurrentDomain.BaseDirectory + info.Substring(0, info.Length) + ".jpg";
+                    bitmap.Save(filePath, System.Drawing.Imaging.ImageFormat.Jpeg);
+                }
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("二维码生成过程出错");
+            }
+        }
+
+        #endregion
+
+
         #endregion
 
         #region Task测试
@@ -1797,10 +1979,16 @@ namespace All_Test
             }
             LogShow(tasktask.Result.ToString());
         }
-        #endregion
+
+
+
+
+
+
 
         #endregion
 
+        #endregion
 
     }
 }

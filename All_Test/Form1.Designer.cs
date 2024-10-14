@@ -32,17 +32,22 @@ namespace All_Test
             this.button1 = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.groupBox16 = new System.Windows.Forms.GroupBox();
+            this.btn_StrToFloat = new System.Windows.Forms.Button();
+            this.tb_str = new System.Windows.Forms.TextBox();
             this.groupBox14 = new System.Windows.Forms.GroupBox();
             this.btn_listForEach = new System.Windows.Forms.Button();
             this.groupBox10 = new System.Windows.Forms.GroupBox();
-            this.btn_Ticks = new System.Windows.Forms.Button();
-            this.btn_TypeConverter = new System.Windows.Forms.Button();
+            this.btn_func = new System.Windows.Forms.Button();
+            this.btn_action = new System.Windows.Forms.Button();
             this.groupBox9 = new System.Windows.Forms.GroupBox();
+            this.btn_TypeConverter = new System.Windows.Forms.Button();
             this.btn_modbus = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
             this.tb_floatValue = new System.Windows.Forms.TextBox();
             this.btn_shift = new System.Windows.Forms.Button();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
+            this.btn_Ticks = new System.Windows.Forms.Button();
             this.btn_WaitTime = new System.Windows.Forms.Button();
             this.btn_TimerTest = new System.Windows.Forms.Button();
             this.tb_min = new System.Windows.Forms.TextBox();
@@ -94,9 +99,15 @@ namespace All_Test
             this.label3 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.list_log = new System.Windows.Forms.RichTextBox();
+            this.groupBox17 = new System.Windows.Forms.GroupBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.btn_QRcode = new System.Windows.Forms.Button();
+            this.tb_QRcode = new System.Windows.Forms.TextBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.groupBox16.SuspendLayout();
             this.groupBox14.SuspendLayout();
+            this.groupBox10.SuspendLayout();
             this.groupBox9.SuspendLayout();
             this.groupBox8.SuspendLayout();
             this.groupBox7.SuspendLayout();
@@ -111,11 +122,13 @@ namespace All_Test
             this.groupBox15.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            this.groupBox17.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(103, 18);
+            this.button1.Location = new System.Drawing.Point(17, 58);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 29);
             this.button1.TabIndex = 0;
@@ -139,6 +152,7 @@ namespace All_Test
             // tabPage1
             // 
             this.tabPage1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.tabPage1.Controls.Add(this.groupBox16);
             this.tabPage1.Controls.Add(this.groupBox14);
             this.tabPage1.Controls.Add(this.groupBox10);
             this.tabPage1.Controls.Add(this.groupBox9);
@@ -156,6 +170,35 @@ namespace All_Test
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "测试页1";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // groupBox16
+            // 
+            this.groupBox16.Controls.Add(this.btn_StrToFloat);
+            this.groupBox16.Controls.Add(this.tb_str);
+            this.groupBox16.Location = new System.Drawing.Point(430, 24);
+            this.groupBox16.Name = "groupBox16";
+            this.groupBox16.Size = new System.Drawing.Size(112, 142);
+            this.groupBox16.TabIndex = 11;
+            this.groupBox16.TabStop = false;
+            this.groupBox16.Text = "string转float";
+            // 
+            // btn_StrToFloat
+            // 
+            this.btn_StrToFloat.Location = new System.Drawing.Point(19, 58);
+            this.btn_StrToFloat.Name = "btn_StrToFloat";
+            this.btn_StrToFloat.Size = new System.Drawing.Size(75, 29);
+            this.btn_StrToFloat.TabIndex = 4;
+            this.btn_StrToFloat.Text = "转换";
+            this.btn_StrToFloat.UseVisualStyleBackColor = true;
+            this.btn_StrToFloat.Click += new System.EventHandler(this.btn_StrToFloat_Click);
+            // 
+            // tb_str
+            // 
+            this.tb_str.Location = new System.Drawing.Point(19, 26);
+            this.tb_str.Name = "tb_str";
+            this.tb_str.Size = new System.Drawing.Size(75, 21);
+            this.tb_str.TabIndex = 3;
+            this.tb_str.Text = "123.6";
             // 
             // groupBox14
             // 
@@ -179,31 +222,34 @@ namespace All_Test
             // 
             // groupBox10
             // 
+            this.groupBox10.Controls.Add(this.btn_func);
+            this.groupBox10.Controls.Add(this.btn_action);
             this.groupBox10.Location = new System.Drawing.Point(548, 172);
             this.groupBox10.Name = "groupBox10";
             this.groupBox10.Size = new System.Drawing.Size(218, 106);
             this.groupBox10.TabIndex = 8;
             this.groupBox10.TabStop = false;
+            this.groupBox10.Text = "委托";
             // 
-            // btn_Ticks
+            // btn_func
             // 
-            this.btn_Ticks.Location = new System.Drawing.Point(434, 20);
-            this.btn_Ticks.Name = "btn_Ticks";
-            this.btn_Ticks.Size = new System.Drawing.Size(84, 32);
-            this.btn_Ticks.TabIndex = 1;
-            this.btn_Ticks.Text = "计时周期";
-            this.btn_Ticks.UseVisualStyleBackColor = true;
-            this.btn_Ticks.Click += new System.EventHandler(this.btn_Ticks_Click);
+            this.btn_func.Location = new System.Drawing.Point(121, 20);
+            this.btn_func.Name = "btn_func";
+            this.btn_func.Size = new System.Drawing.Size(75, 36);
+            this.btn_func.TabIndex = 0;
+            this.btn_func.Text = "Func委托";
+            this.btn_func.UseVisualStyleBackColor = true;
+            this.btn_func.Click += new System.EventHandler(this.btn_func_Click);
             // 
-            // btn_TypeConverter
+            // btn_action
             // 
-            this.btn_TypeConverter.Location = new System.Drawing.Point(94, 94);
-            this.btn_TypeConverter.Name = "btn_TypeConverter";
-            this.btn_TypeConverter.Size = new System.Drawing.Size(118, 32);
-            this.btn_TypeConverter.TabIndex = 0;
-            this.btn_TypeConverter.Text = "mudbusCRC16校验";
-            this.btn_TypeConverter.UseVisualStyleBackColor = true;
-            this.btn_TypeConverter.Click += new System.EventHandler(this.btn_TypeConverter_Click);
+            this.btn_action.Location = new System.Drawing.Point(20, 21);
+            this.btn_action.Name = "btn_action";
+            this.btn_action.Size = new System.Drawing.Size(75, 36);
+            this.btn_action.TabIndex = 0;
+            this.btn_action.Text = "Action委托";
+            this.btn_action.UseVisualStyleBackColor = true;
+            this.btn_action.Click += new System.EventHandler(this.btn_action_Click);
             // 
             // groupBox9
             // 
@@ -218,6 +264,16 @@ namespace All_Test
             this.groupBox9.TabIndex = 7;
             this.groupBox9.TabStop = false;
             this.groupBox9.Text = "浮点数转4字节";
+            // 
+            // btn_TypeConverter
+            // 
+            this.btn_TypeConverter.Location = new System.Drawing.Point(94, 94);
+            this.btn_TypeConverter.Name = "btn_TypeConverter";
+            this.btn_TypeConverter.Size = new System.Drawing.Size(118, 32);
+            this.btn_TypeConverter.TabIndex = 0;
+            this.btn_TypeConverter.Text = "mudbusCRC16校验";
+            this.btn_TypeConverter.UseVisualStyleBackColor = true;
+            this.btn_TypeConverter.Click += new System.EventHandler(this.btn_TypeConverter_Click);
             // 
             // btn_modbus
             // 
@@ -275,6 +331,16 @@ namespace All_Test
             this.groupBox8.TabIndex = 6;
             this.groupBox8.TabStop = false;
             this.groupBox8.Text = "延时/倒计时";
+            // 
+            // btn_Ticks
+            // 
+            this.btn_Ticks.Location = new System.Drawing.Point(434, 20);
+            this.btn_Ticks.Name = "btn_Ticks";
+            this.btn_Ticks.Size = new System.Drawing.Size(84, 32);
+            this.btn_Ticks.TabIndex = 1;
+            this.btn_Ticks.Text = "计时周期";
+            this.btn_Ticks.UseVisualStyleBackColor = true;
+            this.btn_Ticks.Click += new System.EventHandler(this.btn_Ticks_Click);
             // 
             // btn_WaitTime
             // 
@@ -494,8 +560,10 @@ namespace All_Test
             this.textBox_age.Location = new System.Drawing.Point(61, 61);
             this.textBox_age.Multiline = true;
             this.textBox_age.Name = "textBox_age";
-            this.textBox_age.Size = new System.Drawing.Size(66, 27);
+            this.textBox_age.Size = new System.Drawing.Size(104, 27);
             this.textBox_age.TabIndex = 2;
+            this.textBox_age.Leave += new System.EventHandler(this.textBox_age_Leave);
+            this.textBox_age.MouseDown += new System.Windows.Forms.MouseEventHandler(this.textBox_age_MouseDown);
             // 
             // textBox_name
             // 
@@ -503,8 +571,10 @@ namespace All_Test
             this.textBox_name.Location = new System.Drawing.Point(61, 24);
             this.textBox_name.Multiline = true;
             this.textBox_name.Name = "textBox_name";
-            this.textBox_name.Size = new System.Drawing.Size(66, 27);
+            this.textBox_name.Size = new System.Drawing.Size(104, 27);
             this.textBox_name.TabIndex = 2;
+            this.textBox_name.Leave += new System.EventHandler(this.textBox_name_Leave);
+            this.textBox_name.MouseDown += new System.Windows.Forms.MouseEventHandler(this.textBox_name_MouseDown);
             // 
             // textBox1
             // 
@@ -542,7 +612,7 @@ namespace All_Test
             this.groupBox1.Controls.Add(this.button1);
             this.groupBox1.Location = new System.Drawing.Point(323, 24);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(219, 142);
+            this.groupBox1.Size = new System.Drawing.Size(101, 142);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "int转byte[]";
@@ -551,15 +621,15 @@ namespace All_Test
             // 
             this.tb_value.Location = new System.Drawing.Point(17, 26);
             this.tb_value.Name = "tb_value";
-            this.tb_value.Size = new System.Drawing.Size(69, 21);
+            this.tb_value.Size = new System.Drawing.Size(75, 21);
             this.tb_value.TabIndex = 3;
             this.tb_value.Text = "-90";
             // 
             // btn_convert
             // 
-            this.btn_convert.Location = new System.Drawing.Point(103, 56);
+            this.btn_convert.Location = new System.Drawing.Point(17, 98);
             this.btn_convert.Name = "btn_convert";
-            this.btn_convert.Size = new System.Drawing.Size(75, 34);
+            this.btn_convert.Size = new System.Drawing.Size(75, 29);
             this.btn_convert.TabIndex = 2;
             this.btn_convert.Text = "转换";
             this.btn_convert.UseVisualStyleBackColor = true;
@@ -568,6 +638,7 @@ namespace All_Test
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.groupBox13);
+            this.tabPage2.Controls.Add(this.groupBox17);
             this.tabPage2.Controls.Add(this.groupBox12);
             this.tabPage2.Controls.Add(this.groupBox11);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
@@ -582,7 +653,7 @@ namespace All_Test
             // 
             this.groupBox13.Controls.Add(this.tb_angle);
             this.groupBox13.Controls.Add(this.btn_sin);
-            this.groupBox13.Location = new System.Drawing.Point(453, 6);
+            this.groupBox13.Location = new System.Drawing.Point(237, 6);
             this.groupBox13.Name = "groupBox13";
             this.groupBox13.Size = new System.Drawing.Size(210, 137);
             this.groupBox13.TabIndex = 1;
@@ -610,9 +681,9 @@ namespace All_Test
             // 
             // groupBox12
             // 
-            this.groupBox12.Location = new System.Drawing.Point(237, 6);
+            this.groupBox12.Location = new System.Drawing.Point(453, 6);
             this.groupBox12.Name = "groupBox12";
-            this.groupBox12.Size = new System.Drawing.Size(210, 137);
+            this.groupBox12.Size = new System.Drawing.Size(321, 137);
             this.groupBox12.TabIndex = 1;
             this.groupBox12.TabStop = false;
             this.groupBox12.Text = "groupBox12";
@@ -792,6 +863,45 @@ namespace All_Test
             this.list_log.TabIndex = 1;
             this.list_log.Text = "";
             // 
+            // groupBox17
+            // 
+            this.groupBox17.Controls.Add(this.tb_QRcode);
+            this.groupBox17.Controls.Add(this.btn_QRcode);
+            this.groupBox17.Controls.Add(this.pictureBox1);
+            this.groupBox17.Location = new System.Drawing.Point(6, 149);
+            this.groupBox17.Name = "groupBox17";
+            this.groupBox17.Size = new System.Drawing.Size(294, 179);
+            this.groupBox17.TabIndex = 1;
+            this.groupBox17.TabStop = false;
+            this.groupBox17.Text = "二维码生成";
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Location = new System.Drawing.Point(6, 20);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(153, 153);
+            this.pictureBox1.TabIndex = 0;
+            this.pictureBox1.TabStop = false;
+            // 
+            // btn_QRcode
+            // 
+            this.btn_QRcode.Location = new System.Drawing.Point(177, 138);
+            this.btn_QRcode.Name = "btn_QRcode";
+            this.btn_QRcode.Size = new System.Drawing.Size(100, 35);
+            this.btn_QRcode.TabIndex = 1;
+            this.btn_QRcode.Text = "生成";
+            this.btn_QRcode.UseVisualStyleBackColor = true;
+            this.btn_QRcode.Click += new System.EventHandler(this.btn_QRcode_Click);
+            // 
+            // tb_QRcode
+            // 
+            this.tb_QRcode.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.tb_QRcode.Location = new System.Drawing.Point(177, 20);
+            this.tb_QRcode.Multiline = true;
+            this.tb_QRcode.Name = "tb_QRcode";
+            this.tb_QRcode.Size = new System.Drawing.Size(100, 105);
+            this.tb_QRcode.TabIndex = 2;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -805,7 +915,10 @@ namespace All_Test
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
+            this.groupBox16.ResumeLayout(false);
+            this.groupBox16.PerformLayout();
             this.groupBox14.ResumeLayout(false);
+            this.groupBox10.ResumeLayout(false);
             this.groupBox9.ResumeLayout(false);
             this.groupBox9.PerformLayout();
             this.groupBox8.ResumeLayout(false);
@@ -827,6 +940,9 @@ namespace All_Test
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
             this.groupBox3.ResumeLayout(false);
+            this.groupBox17.ResumeLayout(false);
+            this.groupBox17.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -898,6 +1014,15 @@ namespace All_Test
         private System.Windows.Forms.Button btn_TaskWaitAll;
         private System.Windows.Forms.Button btn_Task;
         private System.Windows.Forms.Button btn_WaitTime;
+        private System.Windows.Forms.GroupBox groupBox16;
+        private System.Windows.Forms.Button btn_StrToFloat;
+        private System.Windows.Forms.TextBox tb_str;
+        private System.Windows.Forms.Button btn_func;
+        private System.Windows.Forms.Button btn_action;
+        private System.Windows.Forms.GroupBox groupBox17;
+        private System.Windows.Forms.Button btn_QRcode;
+        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.TextBox tb_QRcode;
     }
 }
 
