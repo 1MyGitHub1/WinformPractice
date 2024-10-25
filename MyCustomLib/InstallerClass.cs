@@ -35,11 +35,12 @@ namespace MyCustomLib
                 //安装路径
                 Assembly asm = Assembly.GetExecutingAssembly();
                 string path = asm.Location.Remove(asm.Location.LastIndexOf("\\")) + "\\";
-                Logger($"安装路径:{path}");
+                Logger($"安装路径path:{path}");
 
                 //Logger($"OnAfterInstall开始");
                 //long installDirSize = 0;
-                string himassDir = "D:\\labtech\\APP1";
+                string himassDir = asm.Location.Remove(asm.Location.LastIndexOf("\\")) + "\\";         //"D:\\labtech\\APP1";
+                Logger($"安装路径himassDir:{himassDir}");
                 //string himassDir = "D:\\Program Files\\HiMass";
                 //string himassDir = HelpClass.FindInstallDir("HiMass", out installDirSize);
                 //判断否已经安装Mass,(没有安装:就不存在安装插件)
@@ -81,7 +82,7 @@ namespace MyCustomLib
                 //2、当然还有另外一种开机启动的方式是可以使用Setup Projects的注册表编辑器的来进行注册
                 //savedState.Add("savedState", path);
                 //Assembly asm = Assembly.GetExecutingAssembly();
-                string asmpath = asm.Location.Remove(asm.Location.LastIndexOf("\\")) + "\\";
+                string asmpath = asm.Location.Remove(asm.Location.LastIndexOf("\\")) + "\\UT-880qudong\\";
                 Logger($"OnAfterInstall asmpath:{asmpath}");
                 //SetAutoStart(true, "MyTestWinFrm", asmpath + "MyTestWinFrm.exe");
                 //Process.Start(asmpath + "\\ServiceXStart.exe");//要执行的程序

@@ -1,4 +1,7 @@
-﻿using All_Test.Class;
+﻿using AForge;
+using AForge.Video;
+using AForge.Video.DirectShow;
+using All_Test.Class;
 using All_Test.Enum;
 using All_Test.Serials;
 using System;
@@ -7,6 +10,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
+using System.Diagnostics.Tracing;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -21,7 +25,11 @@ using System.Timers;
 using System.Windows.Forms;
 using ZXing;
 using static All_Test.Form1;
+using static System.Net.Mime.MediaTypeNames;
+using static System.Windows.Forms.AxHost;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
+using Point = System.Drawing.Point;
 using Timer = System.Timers.Timer;
 
 namespace All_Test
@@ -55,6 +63,7 @@ namespace All_Test
             //    }
             //}
             MatchTest();
+            getCamList();       //获取摄像头
         }
 
         #region 变量
@@ -75,7 +84,7 @@ namespace All_Test
                 this.BeginInvoke(new EventHandler(delegate
                 {
                     list_log.AppendText(string.Format("[{0:HH:mm:ss}] {1}\r\n", DateTime.Now, logStr));
-                    Application.DoEvents();
+                    System.Windows.Forms.Application.DoEvents();
                     //更改颜色
                     list_log.ForeColor = Color.FromArgb(51, 255, 102);
                     //str = ChangeDateformat() + " " + DateTime.Now.ToShortTimeString() + " :" + logStr + "\n";
@@ -136,10 +145,10 @@ namespace All_Test
                 {
                     e.Cancel = true;
                 }
-                else
-                {
-                    Environment.Exit(0);
-                }
+                //else
+                //{
+                //    Environment.Exit(0);
+                //}
             }
             catch (Exception)
             {
@@ -150,7 +159,7 @@ namespace All_Test
 
         #region 测试页1
 
-        #region 配置文件
+        #region 配置文件 .ini
         public static string AssemblyDirectory
         {
             get
@@ -289,6 +298,42 @@ namespace All_Test
 
         #endregion
 
+        #region 配置文件 .dat
+        private void btn_DatFilewrite_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string ConfigFilePath = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Parameters\\config.dat");
+                //写入
+                Hashtable para = new Hashtable();
+                para.Add("ZH", tb_w1.Text);
+                para.Add("MM", tb_w2.Text);
+                DatFileHelpClass.EncryptObject(para, ConfigFilePath);
+            }
+            catch (Exception)
+            {
+                LogShow("数据写入失败！");
+            }
+        }
+        private void btn_DatfileRead_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string ConfigFilePath = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Parameters\\config.dat");
+                //读取
+                Hashtable para = new Hashtable();
+                object obj = DatFileHelpClass.DecryptObject(ConfigFilePath);
+                para = obj as Hashtable;
+                tb_R1.Text = para["ZH"].ToString();
+                tb_R2.Text = para["MM"].ToString();
+            }
+            catch (Exception)
+            {
+                LogShow("数据读取失败！");
+            }
+        }
+        #endregion
+
         #region  int转byte[]
         public byte[] intToBytes(int value)
         {
@@ -390,6 +435,66 @@ namespace All_Test
                 LogShow("转换成功！");
             }
         }
+        #endregion
+
+        #region 四字节float类型转byte
+        private void btn_shift_Click(object sender, EventArgs e)
+        {
+
+            //byte[] frameArray = new byte[4];
+
+            //frameArray[0] = 0x42;
+            //frameArray[1] = 0xB4;
+            //frameArray[2] = 0x00;
+            //frameArray[3] = 0x00;
+            //Console.WriteLine(frameArray[3] + "\n" + frameArray[2] + "\n" + frameArray[1] + "\n" + frameArray[0] + "\n");
+
+            ////四字节float类型转byte 方法1：
+            if (tb_floatValue.Text != "")
+            {
+                byte[] bytes = BitConverter.GetBytes(float.Parse(tb_floatValue.Text));
+                LogShow(bytes[0].ToString() + "," + bytes[1].ToString() + "," + bytes[2].ToString() + "," + bytes[3].ToString());
+                Console.WriteLine(bytes[0] + "\n" + bytes[1] + "\n" + bytes[2] + "\n" + bytes[3] + "\n");
+                //Array.Reverse(bytes);
+                //Console.WriteLine(bytes[0] + "\n" + bytes[1] + "\n" + bytes[2] + "\n" + bytes[3] + "\n");
+                if (BitConverter.ToUInt32(bytes, 0) == 0x42B40000)
+                {
+                    Console.WriteLine("=0x42B40000:" + BitConverter.ToUInt32(bytes, 0).ToString());
+
+                }
+
+            }
+            else
+            {
+                tb_floatValue.Text = "90";
+            }
+
+
+            string accum = 90.ToString("X8");
+            Console.WriteLine(accum);
+
+            byte[] arr = new byte[] { 0x42, 0xB4, 0x00, 0x00 };
+            Console.WriteLine(BitConverter.ToSingle(arr, 0).ToString());
+            Array.Reverse(arr);
+            if (BitConverter.ToUInt32(arr, 0) == 0x42B40000)
+            {
+                Console.WriteLine(BitConverter.ToUInt32(arr, 0).ToString());
+
+            }
+
+            //方法2：
+            //byte[] bytes = GlobalInfo.ToByte(90);
+            //Console.WriteLine(bytes[3] + "\n" + bytes[2] + "\n" + bytes[1] + "\n" + bytes[0] + "\n");
+
+            //byte[] arr = new byte[] { 0x42, 0xB4, 0x00, 0x00 };
+            //float value = GlobalInfo.ToFloat(arr);
+            //Console.WriteLine(value);
+
+
+            byte bytevalue = Convert.ToByte((0x88 >> 4) & 0x0f);
+            Console.WriteLine(bytevalue);
+        }
+
         #endregion
 
         #region 事件调用实时读取--参考
@@ -838,83 +943,6 @@ namespace All_Test
         }
         #endregion
 
-        #region 取消正在运行得Task
-        /// <summary>
-        /// 非标准不推荐任务取消操作
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btn_Cancel_Click(object sender, EventArgs e)
-        {
-            //新建线程引用
-            Thread _thread = null;
-            //新建任务
-            Task t = Task.Run(() =>
-            {
-                //获取当前任务底层得线程得引用
-                _thread = Thread.CurrentThread;
-                //任务开始
-                Console.WriteLine("Task Start!");
-                //模拟耗时操作
-                Thread.Sleep(1000);
-                //任务结束
-                Console.WriteLine("Task finished!");
-
-            });
-            //让任务先运行起来
-            Thread.Sleep(10000);
-
-            //强行终止任务
-            _thread.Abort();
-
-            //wait
-            Console.WriteLine("Success");
-            Console.ReadKey();
-        }
-        /// <summary>
-        /// 标准推荐任务取消操作
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btn_StandardCancel_Click(object sender, EventArgs e)
-        {
-            CancellationTokenSource tokenSource = new CancellationTokenSource();
-            CancellationToken token = tokenSource.Token;
-
-            Task t = Task.Run(() =>
-            {
-                while (true)
-                {
-                    //检测任务是否被取消
-                    if (tokenSource.IsCancellationRequested)
-                    {
-                        Console.WriteLine("Task canceled");
-                        break;
-                    }
-                    //任务开始
-                    Console.WriteLine("Task start!");
-
-                    //模拟耗时的操作
-                    Thread.Sleep(10000);
-
-                    //任务结束
-                    Console.WriteLine("Task finished!");
-                }
-            }, token);
-
-            while (true)
-            {
-                Console.WriteLine("请切换到英文输入法！");
-                Console.WriteLine("取消任务请按W键");
-                if (Console.ReadKey().Key == ConsoleKey.W)
-                {
-                    tokenSource.Cancel();
-                }
-            }
-        }
-
-        #endregion
-
         #region 获取代码运行时间
         private void btn_AcquisitionTime_Click(object sender, EventArgs e)
         {
@@ -1099,66 +1127,6 @@ namespace All_Test
             LogShow("=定时器数据接收服务开启=");
         }
 
-
-        #endregion
-
-        #region 四字节float类型转byte
-        private void btn_shift_Click(object sender, EventArgs e)
-        {
-
-            //byte[] frameArray = new byte[4];
-
-            //frameArray[0] = 0x42;
-            //frameArray[1] = 0xB4;
-            //frameArray[2] = 0x00;
-            //frameArray[3] = 0x00;
-            //Console.WriteLine(frameArray[3] + "\n" + frameArray[2] + "\n" + frameArray[1] + "\n" + frameArray[0] + "\n");
-
-            ////四字节float类型转byte 方法1：
-            if (tb_floatValue.Text != "")
-            {
-                byte[] bytes = BitConverter.GetBytes(float.Parse(tb_floatValue.Text));
-                LogShow(bytes[0].ToString() + "," + bytes[1].ToString() + "," + bytes[2].ToString() + "," + bytes[3].ToString());
-                Console.WriteLine(bytes[0] + "\n" + bytes[1] + "\n" + bytes[2] + "\n" + bytes[3] + "\n");
-                //Array.Reverse(bytes);
-                //Console.WriteLine(bytes[0] + "\n" + bytes[1] + "\n" + bytes[2] + "\n" + bytes[3] + "\n");
-                if (BitConverter.ToUInt32(bytes, 0) == 0x42B40000)
-                {
-                    Console.WriteLine("=0x42B40000:" + BitConverter.ToUInt32(bytes, 0).ToString());
-
-                }
-
-            }
-            else
-            {
-                tb_floatValue.Text = "90";
-            }
-
-
-            string accum = 90.ToString("X8");
-            Console.WriteLine(accum);
-
-            byte[] arr = new byte[] { 0x42, 0xB4, 0x00, 0x00 };
-            Console.WriteLine(BitConverter.ToSingle(arr, 0).ToString());
-            Array.Reverse(arr);
-            if (BitConverter.ToUInt32(arr, 0) == 0x42B40000)
-            {
-                Console.WriteLine(BitConverter.ToUInt32(arr, 0).ToString());
-
-            }
-
-            //方法2：
-            //byte[] bytes = GlobalInfo.ToByte(90);
-            //Console.WriteLine(bytes[3] + "\n" + bytes[2] + "\n" + bytes[1] + "\n" + bytes[0] + "\n");
-
-            //byte[] arr = new byte[] { 0x42, 0xB4, 0x00, 0x00 };
-            //float value = GlobalInfo.ToFloat(arr);
-            //Console.WriteLine(value);
-
-
-            byte bytevalue = Convert.ToByte((0x88 >> 4) & 0x0f);
-            Console.WriteLine(bytevalue);
-        }
 
         #endregion
 
@@ -1444,63 +1412,6 @@ namespace All_Test
         }
         #endregion
 
-        #region 正则表达式
-        public void MatchTest()
-        {
-            string we = DateTime.Now.ToLongDateString().ToString();
-            //string pattern = @"\^(?< !\\QSS\\E).*$\";
-            //string str = "S S  456.5g";
-            //// 找出不匹配项
-            //List<string> mismatches = new List<string>();
-            //foreach (var s in str)
-            //{
-            //    // 检查是否匹配
-            //    Match match1 = Regex.Match(str, pattern);
-            //    if (!match1.Success)
-            //    {
-            //        // 不匹配的项添加到列表
-            //        mismatches.Add(str);
-            //    }
-            //}
-
-
-            string str = "S S  456.5g";
-            str = Regex.Replace(str, @"\s", "");
-            for (int i = 0; i < str.Length; i++)
-            {
-                if (str[i] == 'S' || str[i] == 'D' || str[i] == 'g')
-                {
-                   str = str.Replace(str[i], ' ');                   
-                }
-            }
-            Console.WriteLine(str);
-
-
-            #region MyRegion
-            //string Text = "http://192.168.0.1:2008";
-            //string pattern = @"/b(/S+)://(/S+)(?::(/S+))/b";
-            //MatchCollection matches = Regex.Matches(Text, pattern, RegexOptions.ExplicitCapture | RegexOptions.RightToLeft);
-
-            //Console.WriteLine("从左向右匹配字符串：");
-
-            //foreach (Match NextMatch in matches)
-            //{
-            //    Console.Write("匹配的位置：{0} ", NextMatch.Index);
-            //    Console.Write("匹配的内容：{0} ", NextMatch.Value);
-            //    Console.Write("/n");
-
-            //    for (int i = 0; i < NextMatch.Groups.Count; i++)
-            //    {
-            //        Console.Write("匹配的组 {0}：{1,4} ", i + 1, NextMatch.Groups[i].Value);
-            //        Console.Write("/n");
-            //    }
-            //}
-            #endregion
-
-
-        }
-        #endregion
-
         #region DateTime.Time. Ticks
 
         private void btn_Ticks_Click(object sender, EventArgs e)
@@ -1538,94 +1449,7 @@ namespace All_Test
 
         #endregion
 
-        #region list.ForEach
-        public class PersonTest
-        {
-            //private int id;
-            public int Id { get; set; }
-            //private string personName;
-            public string PersonName { get; set; }
 
-        }
-        private void btn_listForEach_Click(object sender, EventArgs e)
-        {
-            List<PersonTest> list = new List<PersonTest>(){
-             new PersonTest(){ Id=1,PersonName="AAA"},
-             new PersonTest(){ Id=2,PersonName="SSS"},
-             new PersonTest(){ Id=3,PersonName="BBB"},
-             new PersonTest(){ Id=4,PersonName="RRR"},
-             };
-            list.ForEach(item =>
-            {
-                if (item.PersonName.Contains("S")|| item.PersonName.Contains("R"))
-                {
-                    item.PersonName = "111";
-                }
-                LogShow(item.Id + ":" + item.PersonName);
-            });
-            list.ForEach(t => t.PersonName = "OOO");
-            list.ForEach(Print); 
-        }
-        private void Print(PersonTest personTest)
-        {
-            LogShow(personTest.Id + ":" + personTest.PersonName);
-        }
-        #endregion
-
-        #region 委托
-        //Action委托(都没有返回值)：
-        //Action：无参，无返回值；
-        //Action<T>：有参数T(1~16 个)，无返回值；
-
-        //Func委托(都有返回值)：
-        //Func<T>:无参，返回值为T;
-        //Func<T1, T2, T>:有参数T1,T2(1~16个)，返回值为T
-
-        /// <summary>
-        /// Action委托
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btn_action_Click(object sender, EventArgs e)
-        {
-            Action action01;                                    //定义Action委托，无参数，无返回值
-            action01 = () => LogShow("Action无参数的委托");       //使用Lambda表达式添加方法语句块
-            action01();
-
-            Action<int> action02;
-            action02 = (int a) => LogShow("Action有1个参数的委托"+ a);
-            //action02 = (int a) => Console.WriteLine("Action有1个参数的委托{0}", a);
-            action02(666);
-        }
-        /// <summary>
-        /// Func委托
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btn_func_Click(object sender, EventArgs e)
-        {
-            //定义Func委托，没有参数，返回值是int
-            Func<int> func01;
-            func01 = () => 
-            { 
-                LogShow("一个无参数的Func委托，返回值是：");
-                return 123;
-            };
-            var temp = func01();
-            LogShow(temp.ToString());
-
-
-            //定义Func委托，有两个string参数，返回值是int，注意返回值是在<>的最后一个
-            Func<string, string, int> func02;
-            func02 = (string str1, string str2) =>
-            {
-                LogShow($"{str1}一个无参数的Func委托{str2}，返回值是： ");
-                return 567;
-            };
-            var temp02 = func02("我是","类型");
-            LogShow(temp02.ToString());
-        }
-        #endregion
 
 
         #endregion
@@ -1808,12 +1632,158 @@ namespace All_Test
 
         #endregion
 
+        #region list.ForEach
+        public class PersonTest
+        {
+            //private int id;
+            public int Id { get; set; }
+            //private string personName;
+            public string PersonName { get; set; }
+
+        }
+        private void btn_listForEach_Click(object sender, EventArgs e)
+        {
+            List<PersonTest> list = new List<PersonTest>(){
+             new PersonTest(){ Id=1,PersonName="AAA"},
+             new PersonTest(){ Id=2,PersonName="SSS"},
+             new PersonTest(){ Id=3,PersonName="BBB"},
+             new PersonTest(){ Id=4,PersonName="RRR"},
+             };
+            list.ForEach(item =>
+            {
+                if (item.PersonName.Contains("S") || item.PersonName.Contains("R"))
+                {
+                    item.PersonName = "111";
+                }
+                LogShow(item.Id + ":" + item.PersonName);
+            });
+            list.ForEach(t => t.PersonName = "OOO");
+            list.ForEach(Print);
+        }
+        private void Print(PersonTest personTest)
+        {
+            LogShow(personTest.Id + ":" + personTest.PersonName);
+        }
+        #endregion
+
+        #region 委托
+        //Action委托(都没有返回值)：
+        //Action：无参，无返回值；
+        //Action<T>：有参数T(1~16 个)，无返回值；
+
+        //Func委托(都有返回值)：
+        //Func<T>:无参，返回值为T;
+        //Func<T1, T2, T>:有参数T1,T2(1~16个)，返回值为T
+
+        /// <summary>
+        /// Action委托
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btn_action_Click(object sender, EventArgs e)
+        {
+            Action action01;                                    //定义Action委托，无参数，无返回值
+            action01 = () => LogShow("Action无参数的委托");       //使用Lambda表达式添加方法语句块
+            action01();
+
+            Action<int> action02;
+            action02 = (int a) => LogShow("Action有1个参数的委托" + a);
+            //action02 = (int a) => Console.WriteLine("Action有1个参数的委托{0}", a);
+            action02(666);
+        }
+        /// <summary>
+        /// Func委托
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btn_func_Click(object sender, EventArgs e)
+        {
+            //定义Func委托，没有参数，返回值是int
+            Func<int> func01;
+            func01 = () =>
+            {
+                LogShow("一个无参数的Func委托，返回值是：");
+                return 123;
+            };
+            var temp = func01();
+            LogShow(temp.ToString());
+
+
+            //定义Func委托，有两个string参数，返回值是int，注意返回值是在<>的最后一个
+            Func<string, string, int> func02;
+            func02 = (string str1, string str2) =>
+            {
+                LogShow($"{str1}一个无参数的Func委托{str2}，返回值是： ");
+                return 567;
+            };
+            var temp02 = func02("我是", "类型");
+            LogShow(temp02.ToString());
+        }
+        #endregion
+
+        #region 正则表达式
+        public void MatchTest()
+        {
+            string we = DateTime.Now.ToLongDateString().ToString();
+            //string pattern = @"\^(?< !\\QSS\\E).*$\";
+            //string str = "S S  456.5g";
+            //// 找出不匹配项
+            //List<string> mismatches = new List<string>();
+            //foreach (var s in str)
+            //{
+            //    // 检查是否匹配
+            //    Match match1 = Regex.Match(str, pattern);
+            //    if (!match1.Success)
+            //    {
+            //        // 不匹配的项添加到列表
+            //        mismatches.Add(str);
+            //    }
+            //}
+
+
+            string str = "S S  456.5g";
+            str = Regex.Replace(str, @"\s", "");
+            for (int i = 0; i < str.Length; i++)
+            {
+                if (str[i] == 'S' || str[i] == 'D' || str[i] == 'g')
+                {
+                    str = str.Replace(str[i], ' ');
+                }
+            }
+            Console.WriteLine(str);
+
+
+            #region MyRegion
+            //string Text = "http://192.168.0.1:2008";
+            //string pattern = @"/b(/S+)://(/S+)(?::(/S+))/b";
+            //MatchCollection matches = Regex.Matches(Text, pattern, RegexOptions.ExplicitCapture | RegexOptions.RightToLeft);
+
+            //Console.WriteLine("从左向右匹配字符串：");
+
+            //foreach (Match NextMatch in matches)
+            //{
+            //    Console.Write("匹配的位置：{0} ", NextMatch.Index);
+            //    Console.Write("匹配的内容：{0} ", NextMatch.Value);
+            //    Console.Write("/n");
+
+            //    for (int i = 0; i < NextMatch.Groups.Count; i++)
+            //    {
+            //        Console.Write("匹配的组 {0}：{1,4} ", i + 1, NextMatch.Groups[i].Value);
+            //        Console.Write("/n");
+            //    }
+            //}
+            #endregion
+
+
+        }
+        #endregion
+
         #region 二维码生成
+        Bitmap bitmap = null;           //结果图片
         private void btn_QRcode_Click(object sender, EventArgs e)
         {
             string info = tb_QRcode.Text.ToString();
 
-            Bitmap bitmap = null;           //结果图片
             int height = 153;
             int width = 153;
             try
@@ -1834,15 +1804,15 @@ namespace All_Test
                 // 保存为图片文件
                 //string filePath = System.AppDomain.CurrentDomain.BaseDirectory + "..\\QR_CODE_" + info.Substring(0, info.Length) + ".jpg";
                 string filePath = System.AppDomain.CurrentDomain.BaseDirectory + "QR_CODE";
-                if (Directory.Exists(filePath)) 
+                if (Directory.Exists(filePath))
                 {
                     filePath = filePath + "\\" + info.Substring(0, info.Length) + ".jpg";
                     bitmap.Save(filePath, System.Drawing.Imaging.ImageFormat.Jpeg);
                 }
-                else 
-                { 
+                else
+                {
                     Directory.CreateDirectory(filePath);
-                    filePath = System.AppDomain.CurrentDomain.BaseDirectory + info.Substring(0, info.Length) + ".jpg";
+                    filePath = filePath + "\\" + info.Substring(0, info.Length) + ".jpg";
                     bitmap.Save(filePath, System.Drawing.Imaging.ImageFormat.Jpeg);
                 }
             }
@@ -1851,13 +1821,358 @@ namespace All_Test
                 MessageBox.Show("二维码生成过程出错");
             }
         }
-
+        /// <summary>
+        /// 清除二维码
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btn_ClearQRCode_Click(object sender, EventArgs e)
+        {
+            tb_QRcode.Text = "";
+            pictureBox1.Image = null;
+        }
         #endregion
 
+        #region 调用摄像头扫描二维码
+        FilterInfoCollection videoDevices; //所有摄像头
+        VideoCaptureDevice videoSource; //当前摄像头 
+        public int selectedDeviceIndex = 0;
+        /// <summary>
+        /// 全局变量，标示设备摄像头设备是否存在
+        /// </summary>
+        bool DeviceExist;
+        /// <summary>
+        /// 全局变量，记录扫描线距离顶端的距离
+        /// </summary>
+        int top = 0;
+        /// <summary>
+        /// 全局变量，保存每一次捕获的图像
+        /// </summary>
+        Bitmap img = null;
+        /// <summary>
+        /// 获取摄像头列表
+        /// </summary>
+
+        [Obsolete]
+        private void btn_GetCamera_Click(object sender, EventArgs e)
+        {
+            if (btn_GetCamera.Text == "摄像头扫描")
+            {
+                if (DeviceExist)
+                {
+                    //视频捕获设备
+                    videoSource = new VideoCaptureDevice(videoDevices[cb_Camera.SelectedIndex].MonikerString);
+                    //捕获到新画面时触发
+                    videoSource.NewFrame += new NewFrameEventHandler(video_NewFrame);
+                    //先关一下，下面再打开。避免重复打开的错误
+                    CloseVideoSource();
+                    //设置画面大小
+                    videoSource.DesiredFrameSize = new Size(160, 120);
+                    //启动视频组件
+                    videoSource.Start();
+                    btn_GetCamera.Text = "结束";
+                    //启动定时解析二维码
+                    timer1.Enabled = true;
+                    //启动绘制视频中的扫描线
+                    timer2.Enabled = true;
+                }
+            }
+            else
+            {
+                if (videoSource.IsRunning)
+                {
+                    timer2.Enabled = false;
+                    timer1.Enabled = false;
+                    CloseVideoSource();
+                    btn_GetCamera.Text = "开始";
+                }
+            }
+        }
+        private void getCamList()
+        {
+            try
+            {
+                //AForge.Video.DirectShow.FilterInfoCollection 设备枚举类
+                videoDevices = new FilterInfoCollection(FilterCategory.VideoInputDevice);
+                //清空列表框
+                cb_Camera.Items.Clear();
+                if (videoDevices.Count == 0)
+                    throw new ApplicationException();
+                DeviceExist = true;
+                //加入设备
+                foreach (FilterInfo device in videoDevices)
+                {
+                    cb_Camera.Items.Add(device.Name);
+                }
+                //默认选择第一项
+                cb_Camera.SelectedIndex = 0;
+            }
+            catch (ApplicationException)
+            {
+                DeviceExist = false;
+                cb_Camera.Items.Add("未找到可用设备");
+            }
+        }
+        /// <summary>
+        /// 处理图片
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            if (img == null)
+            {
+                return;
+            }
+            #region 读取图片并解析成文本-----方式1
+            MemoryStream ms = new MemoryStream();
+            img.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
+
+            BarcodeReader reader = new BarcodeReader();
+            Result result = reader.Decode(img);
+
+            if (result != null)
+            {
+                Encoding utf8 = Encoding.GetEncoding("iso8859-1");   //设置以iso8859-1方式读取
+                byte[] utf8byte = utf8.GetBytes(result.ToString());     //转成字节数组
+                Encoding gbk = Encoding.GetEncoding("gbk");             //设置以gbk格式读取
+                string decodedString = gbk.GetString(utf8byte);         //转成文本
+                //string decodedString = Encoding.UTF8.GetString(utf8byte);
+                tb_QRcodeshow.Text = decodedString;
+            }
+
+            #endregion
+
+            #region 方式2
+#if false
+            #region 将图片转换成byte数组
+            MemoryStream ms1 = new MemoryStream();
+            img.Save(ms1, System.Drawing.Imaging.ImageFormat.Bmp);
+            byte[] bt = ms1.GetBuffer();
+            ms1.Close();
+            #endregion
+
+            #region 不稳定的二维码解析端口
+            LuminanceSource source = new RGBLuminanceSource(bt, img.Width, img.Height);
+            BinaryBitmap bitmap1 = new BinaryBitmap(new ZXing.Common.HybridBinarizer(source));
+
+            Result result;
+
+            MultiFormatReader multiFormatReader = new MultiFormatReader();
+
+            try
+            {
+                //开始解码
+                result = multiFormatReader.decode(bitmap1);//（不定期暴毙）
+                
+            }
+            catch (Exception ex)
+            {
+                return;
+            }
+            finally
+            {
+                multiFormatReader.reset();
+
+            }
+
+
+            if (result != null)
+            {
+                string aaa = result.ToString();
+                string bbb = result.Text;
+                //Encoding.GetEncoding("GB2312").GetString(result);
+                tb_QRcodeshow.Text = result.Text;
+
+            }
+            #endregion
+#endif
+            #endregion
+
+        }
+        /// <summary>
+        /// 红色扫描线
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void timer2_Tick(object sender, EventArgs e)
+        {
+            if (img == null)
+            {
+                return;
+            }
+            Bitmap img2 = (Bitmap)img.Clone();
+            Pen p = new Pen(Color.Red);
+            Graphics g = Graphics.FromImage(img2);
+            Point p1 = new Point(0, top);
+            Point p2 = new Point(pb_show.Width, top);
+            g.DrawLine(p, p1, p2);
+            g.Dispose();
+            top += 4;
+
+            top = top % pb_show.Height;
+            pb_show.Image = img2;
+
+        }
+
+        /// <summary>
+        /// 关闭摄像头
+        /// </summary>
+        private void CloseVideoSource()
+        {
+            if (!(videoSource == null))
+            if (videoSource.IsRunning)
+            {
+                videoSource.SignalToStop();
+                videoSource = null;
+                pb_show.Image.Dispose();
+                timer1.Dispose();
+                timer2.Dispose();
+            }
+        }
+        private void video_NewFrame(object sender, NewFrameEventArgs eventArgs)
+        {
+            img = (Bitmap) eventArgs.Frame.Clone();
+            //pb_show.Image = img;
+        }
+        #endregion
+
+        #region 单张二维码图片扫描
+        /// <summary>
+        /// 单张图片扫描
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btn_pictureScan_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (pictureBox1.Image == null)
+                {
+                    MessageBox.Show("请先生成二维码！");
+                    return;
+                }
+                Bitmap Imagemap = new Bitmap(pictureBox1.Image);
+                string QRCodeResult = ParseBarCode(Imagemap);
+                tb_QRcodeshow.Text = QRCodeResult;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+        }
+        /// <summary>
+        /// 清空扫描文本
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btn_ScanText_Click(object sender, EventArgs e)
+        {
+            tb_QRcodeshow.Text = "";
+        }
+        public static string ParseBarCode(Bitmap image)
+        {
+            BarcodeReader reader = new BarcodeReader();
+            Result result = reader.Decode(image);
+            return result.Text;
+        }
+        /// <summary>
+        /// Bitmap转Byte
+        /// </summary>
+        /// <param name="bitmap"></param>
+        /// <returns></returns>
+        public byte[] BitmapToByte(System.Drawing.Bitmap bitmap)
+        {
+            System.IO.MemoryStream ms = new System.IO.MemoryStream();
+            bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
+            ms.Seek(0, System.IO.SeekOrigin.Begin);
+            byte[] bytes = new byte[ms.Length];
+            ms.Read(bytes, 0, bytes.Length);
+            ms.Dispose();
+            return bytes;
+        }
+        #endregion
 
         #endregion
 
         #region Task测试
+        #region 取消正在运行得Task
+        /// <summary>
+        /// 非标准不推荐任务取消操作
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btn_Cancel_Click(object sender, EventArgs e)
+            {
+                //新建线程引用
+                Thread _thread = null;
+                //新建任务
+                Task t = Task.Run(() =>
+                {
+                    //获取当前任务底层得线程得引用
+                    _thread = Thread.CurrentThread;
+                    //任务开始
+                    Console.WriteLine("Task Start!");
+                    //模拟耗时操作
+                    Thread.Sleep(1000);
+                    //任务结束
+                    Console.WriteLine("Task finished!");
+
+                });
+                //让任务先运行起来
+                Thread.Sleep(10000);
+
+                //强行终止任务
+                _thread.Abort();
+
+                //wait
+                Console.WriteLine("Success");
+                Console.ReadKey();
+            }
+            /// <summary>
+            /// 标准推荐任务取消操作
+            /// </summary>
+            /// <param name="sender"></param>
+            /// <param name="e"></param>
+            private void btn_StandardCancel_Click(object sender, EventArgs e)
+            {
+                CancellationTokenSource tokenSource = new CancellationTokenSource();
+                CancellationToken token = tokenSource.Token;
+
+                Task t = Task.Run(() =>
+                {
+                    while (true)
+                    {
+                        //检测任务是否被取消
+                        if (tokenSource.IsCancellationRequested)
+                        {
+                            Console.WriteLine("Task canceled");
+                            break;
+                        }
+                        //任务开始
+                        Console.WriteLine("Task start!");
+
+                        //模拟耗时的操作
+                        Thread.Sleep(10000);
+
+                        //任务结束
+                        Console.WriteLine("Task finished!");
+                    }
+                }, token);
+
+                while (true)
+                {
+                    Console.WriteLine("请切换到英文输入法！");
+                    Console.WriteLine("取消任务请按W键");
+                    if (Console.ReadKey().Key == ConsoleKey.W)
+                    {
+                        tokenSource.Cancel();
+                    }
+                }
+            }
+
+            #endregion
 
         #region Task.Run资源释放
         private void button2_Click(object sender, EventArgs e)
@@ -1986,9 +2301,14 @@ namespace All_Test
 
 
 
+
+
+
+
         #endregion
 
         #endregion
+
 
     }
 }
